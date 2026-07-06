@@ -20,10 +20,10 @@ const skills = [
 
 const experience = [
   {
-    period: '2023 — present',
+    period: '2023 — 2026',
     role: 'Senior Web Developer / Analyst',
     place: 'Bank of Georgia',
-    note: 'Leading frontend delivery for Visa/MasterCard payment platforms in the online payments division.',
+    note: 'Led frontend delivery for Visa/MasterCard payment platforms in the online payments division.',
   },
   {
     period: '2025 — present',
@@ -101,10 +101,11 @@ export default function App() {
               <p>
                 Full-stack engineer with a frontend core — 5+ years building
                 production fintech interfaces, payment flows, and
-                product-focused web and mobile apps. At Bank of Georgia I lead
-                a frontend team in the online payments division; outside of it
-                I take products from idea to launch on my own — most recently
-                MEGZURI, an average-speed tracking app for Georgian drivers.
+                product-focused web and mobile apps. At Bank of Georgia I led
+                a frontend team in the online payments division until 2026;
+                these days I take products from idea to launch on my own —
+                most recently MEGZURI, an average-speed tracking app for
+                Georgian drivers.
               </p>
               <p>
                 I care about clear UX, clean architecture, and measurable
