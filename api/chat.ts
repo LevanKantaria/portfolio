@@ -1,0 +1,167 @@
+import Anthropic from '@anthropic-ai/sdk'
+import {
+  ANSWER_SYSTEM,
+  FILTER_SYSTEM,
+  OFF_TOPIC_REPLY,
+  MAX_MESSAGE_CHARS,
+  MAX_HISTORY_MESSAGES,
+} from './_lib/persona.ts'
+
+export const config = { runtime: 'edge' }
+
+const ANSWER_MODEL = 'claude-sonnet-5'
+const FILTER_MODEL = 'claude-haiku-4-5'
+const ANSWER_MAX_TOKENS = 700
+
+// Per-isolate rate limit: 20 requests per 10 minutes per IP. Serverless
+// instances are ephemeral, so this is burst protection, not a hard quota —
+// pair it with a spend limit on the API key.
+const RATE_LIMIT = 20
+const RATE_WINDOW_MS = 10 * 60 * 1000
+const hits = new Map<string, number[]>()
+
+function rateLimited(ip: string): boolean {
+  const now = Date.now()
+  const recent = (hits.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS)
+  recent.push(now)
+  hits.set(ip, recent)
+  return recent.length > RATE_LIMIT
+}
+
+interface ChatMessage {
+  role: 'user' | 'assistant'
+  content: string
+}
+
+function badRequest(message: string): Response {
+  return Response.json({ error: message }, { status: 400 })
+}
+
+function validate(body: unknown): ChatMessage[] | null {
+  if (typeof body !== 'object' || body === null) return null
+  const { messages } = body as { messages?: unknown }
+  if (!Array.isArray(messages) || messages.length === 0 || messages.length > 40) return null
+
+  const valid: ChatMessage[] = []
+  for (const m of messages) {
+    if (
+      typeof m !== 'object' ||
+      m === null ||
+      (m.role !== 'user' && m.role !== 'assistant') ||
+      typeof m.content !== 'string' ||
+      m.content.trim().length === 0 ||
+      m.content.length > MAX_MESSAGE_CHARS
+    ) {
+      return null
+    }
+    valid.push({ role: m.role, content: m.content })
+  }
+  if (valid[valid.length - 1].role !== 'user') return null
+
+  // Keep the tail of the conversation; the API requires the first message
+  // to be from the user.
+  let trimmed = valid.slice(-MAX_HISTORY_MESSAGES)
+  while (trimmed.length > 0 && trimmed[0].role !== 'user') trimmed = trimmed.slice(1)
+  return trimmed.length > 0 ? trimmed : null
+}
+
+async function isOnTopic(client: Anthropic, messages: ChatMessage[]): Promise<boolean> {
+  const transcript = messages
+    .slice(-6)
+    .map((m) => `${m.role === 'user' ? 'Visitor' : 'Assistant'}: ${m.content}`)
+    .join('\n')
+
+  try {
+    const result = await client.messages.create({
+      model: FILTER_MODEL,
+      max_tokens: 64,
+      system: FILTER_SYSTEM,
+      messages: [{ role: 'user', content: transcript }],
+      output_config: {
+        format: {
+          type: 'json_schema',
+          schema: {
+            type: 'object',
+            properties: { relevant: { type: 'boolean' } },
+            required: ['relevant'],
+            additionalProperties: false,
+          },
+        },
+      },
+    })
+    const block = result.content.find((b) => b.type === 'text')
+    if (!block) return true
+    return (JSON.parse(block.text) as { relevant: boolean }).relevant
+  } catch {
+    // If the filter fails, let the grounded answer prompt do the gatekeeping
+    // rather than breaking the chat.
+    return true
+  }
+}
+
+export default async function handler(req: Request): Promise<Response> {
+  if (req.method !== 'POST') {
+    return Response.json({ error: 'Method not allowed' }, { status: 405 })
+  }
+
+  const apiKey = process.env.ANTHROPIC_API_KEY
+  if (!apiKey) {
+    return Response.json({ error: 'Chat is not configured' }, { status: 503 })
+  }
+
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  if (rateLimited(ip)) {
+    return Response.json({ error: 'Too many requests — try again in a few minutes' }, { status: 429 })
+  }
+
+  let body: unknown
+  try {
+    body = await req.json()
+  } catch {
+    return badRequest('Invalid JSON body')
+  }
+
+  const messages = validate(body)
+  if (!messages) {
+    return badRequest(`Expected {messages: [{role, content}]} ending with a user message, each up to ${MAX_MESSAGE_CHARS} characters`)
+  }
+
+  const client = new Anthropic({ apiKey })
+
+  if (!(await isOnTopic(client, messages))) {
+    return new Response(OFF_TOPIC_REPLY, {
+      headers: { 'content-type': 'text/plain; charset=utf-8' },
+    })
+  }
+
+  const stream = client.messages.stream({
+    model: ANSWER_MODEL,
+    max_tokens: ANSWER_MAX_TOKENS,
+    // Short factual Q&A doesn't need reasoning depth — skip thinking and run
+    // at low effort for faster, cheaper replies.
+    thinking: { type: 'disabled' },
+    output_config: { effort: 'low' },
+    system: [{ type: 'text', text: ANSWER_SYSTEM, cache_control: { type: 'ephemeral' } }],
+    messages,
+  })
+
+  const encoder = new TextEncoder()
+  const readable = new ReadableStream<Uint8Array>({
+    async start(controller) {
+      try {
+        for await (const event of stream) {
+          if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
+            controller.enqueue(encoder.encode(event.delta.text))
+          }
+        }
+        controller.close()
+      } catch (err) {
+        controller.error(err)
+      }
+    },
+  })
+
+  return new Response(readable, {
+    headers: { 'content-type': 'text/plain; charset=utf-8' },
+  })
+}
