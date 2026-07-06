@@ -1,13 +1,14 @@
 import Anthropic from '@anthropic-ai/sdk'
+import type { IncomingMessage, ServerResponse } from 'node:http'
 import {
   ANSWER_SYSTEM,
   FILTER_SYSTEM,
   OFF_TOPIC_REPLY,
   MAX_MESSAGE_CHARS,
   MAX_HISTORY_MESSAGES,
-} from './_lib/persona.ts'
+} from './_lib/persona.js'
 
-export const config = { runtime: 'edge' }
+export const config = { supportsResponseStreaming: true }
 
 const ANSWER_MODEL = 'claude-sonnet-5'
 const FILTER_MODEL = 'claude-haiku-4-5'
@@ -99,7 +100,8 @@ async function isOnTopic(client: Anthropic, messages: ChatMessage[]): Promise<bo
   }
 }
 
-export default async function handler(req: Request): Promise<Response> {
+/** Web-standard core handler — used directly by the Vite dev server. */
+export async function chatHandler(req: Request): Promise<Response> {
   if (req.method !== 'POST') {
     return Response.json({ error: 'Method not allowed' }, { status: 405 })
   }
@@ -164,4 +166,38 @@ export default async function handler(req: Request): Promise<Response> {
   return new Response(readable, {
     headers: { 'content-type': 'text/plain; charset=utf-8' },
   })
+}
+
+/**
+ * Vercel Node.js runtime entrypoint — adapts the classic (req, res) shape
+ * to the web-standard core handler and streams the response through.
+ */
+export default async function handler(
+  req: IncomingMessage & { body?: unknown },
+  res: ServerResponse,
+) {
+  const headers = new Headers()
+  for (const [key, value] of Object.entries(req.headers)) {
+    if (typeof value === 'string') headers.set(key, value)
+    else if (Array.isArray(value)) headers.set(key, value.join(', '))
+  }
+
+  const request = new Request(`https://${req.headers.host ?? 'localhost'}${req.url ?? '/'}`, {
+    method: req.method,
+    headers,
+    // Vercel pre-parses JSON bodies onto req.body; re-serialize for the core handler.
+    body: req.method === 'POST' ? JSON.stringify(req.body ?? null) : undefined,
+  })
+
+  const response = await chatHandler(request)
+  res.writeHead(response.status, Object.fromEntries(response.headers.entries()))
+  if (response.body) {
+    const reader = response.body.getReader()
+    for (;;) {
+      const { done, value } = await reader.read()
+      if (done) break
+      res.write(value)
+    }
+  }
+  res.end()
 }

@@ -1,6 +1,6 @@
 import { defineConfig, loadEnv, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
-import chatHandler from './api/chat.ts'
+import { chatHandler } from './api/chat'
 
 // In production Vercel serves api/chat.ts as an edge function; this plugin
 // wires the same handler into the dev server so /api/chat works locally.
