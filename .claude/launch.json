@@ -4,8 +4,25 @@
     {
       "name": "portfolio",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
       "port": 5173
+    },
+    {
+      "name": "portfolio-v2",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--prefix",
+        "/Users/levanikantaria/portfolio-v2",
+        "--",
+        "--port",
+        "5175"
+      ],
+      "port": 5175
     }
   ]
 }

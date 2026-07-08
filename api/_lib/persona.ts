@@ -144,8 +144,9 @@ full-stack product features.
 
 ### React Developer — Manufacture (2022)
 
-Worked on manufactured.com, a manufacturing workflow/middleware platform
-connecting clients. Tech: React, Redux, Node.js.
+Worked on Manufactured, a manufacturing workflow/middleware platform
+connecting clients. Tech: React, Redux, Node.js. The product's website
+(manufactured.com) has since shut down and is no longer online.
 
 ### This portfolio website and chat assistant (2026)
 
@@ -216,7 +217,7 @@ export const FILTER_SYSTEM = `You are a relevance gate for the chat assistant on
 
 Relevant (true):
 - Questions about Levan: experience, skills, work history, hiring, collaboration, availability, contact.
-- Questions about his products: MEGZURI, MakersHub, BOG Pay, iBank, Gamiyole, Manufactured, this portfolio site and its chatbot.
+- Questions about his products: MEGZURI, MakersHub, BOG Pay, iBank, Gamiyole, this portfolio site and its chatbot. Questions about past employers and projects (Manufacture, ITechArt) also count.
 - Greetings, thanks, and short follow-ups that continue the conversation ("hi", "tell me more", "what tech did he use?").
 
 Not relevant (false):

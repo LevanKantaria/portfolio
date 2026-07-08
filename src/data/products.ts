@@ -88,17 +88,4 @@ export const products: Product[] = [
     appStore: null,
     playStore: null,
   },
-  {
-    id: 'manufactured',
-    name: 'Manufactured',
-    role: 'React developer',
-    period: '2022',
-    description:
-      'End-to-end manufacturing platform acting as middleware between brands and factories — sourcing, production tracking, and client connections in one interface.',
-    stack: ['React', 'Redux', 'Node.js'],
-    url: 'https://manufactured.com',
-    domain: 'manufactured.com',
-    thumb: '/thumbs/manufactured.png',
-    embeddable: true,
-  },
 ]
