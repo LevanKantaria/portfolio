@@ -8,7 +8,7 @@ import mePhoto from './assets/me-avatar.jpg'
 
 const LINKS = {
   linkedin: 'https://www.linkedin.com/in/levan-kantaria-bb223120b/',
-  cv: 'https://drive.google.com/file/d/1u0X6pd-tgA7HsWSdvovS8Nx4Luv9Y2hj/view?usp=sharing',
+  cv: 'https://drive.google.com/file/d/19-35F4dmYZR8mYcoXGwL00XB_0QUZqqJ/view?usp=sharing',
 }
 
 const skills = [

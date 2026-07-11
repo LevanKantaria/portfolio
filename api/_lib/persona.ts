@@ -18,7 +18,7 @@ marketplace products.
 
 Contact: l.kantaria1999@gmail.com
 LinkedIn: https://www.linkedin.com/in/levan-kantaria-bb223120b/
-CV (PDF): https://drive.google.com/file/d/1u0X6pd-tgA7HsWSdvovS8Nx4Luv9Y2hj/view
+CV (PDF): https://drive.google.com/file/d/19-35F4dmYZR8mYcoXGwL00XB_0QUZqqJ/view
 (the CV is also linked on this site via the "Download CV" button in the hero)
 
 About seeing his code: Levan's codebases are private and commercial — banking
