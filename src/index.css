@@ -1617,3 +1617,251 @@ a.store-icon:hover {
   color: var(--wine);
   border-color: var(--wine);
 }
+
+/* ---------- admin: tabs, fields, list editors ---------- */
+
+.admin {
+  max-width: 940px;
+}
+
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.admin-tab {
+  padding: 9px 16px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  font-family: var(--body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.admin-tab:hover {
+  color: var(--ink);
+}
+
+.admin-tab-on {
+  color: var(--ink);
+  border-bottom-color: var(--wine);
+}
+
+.admin-savebar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  padding: 10px 0 14px;
+  background: var(--porcelain);
+}
+
+.admin-dirty {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--wine);
+}
+
+.admin-hint {
+  margin-bottom: 18px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.admin-hint code {
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--porcelain);
+}
+
+.admin-field {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.admin-field-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.admin-field-label em {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+.admin-field-label em::before {
+  content: ' — ';
+}
+
+.admin-field input[type='text'],
+.admin-field input[type='email'],
+.admin-field textarea,
+.admin-field select,
+.admin-row input,
+.admin-row textarea,
+.admin-row select {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  font-family: var(--body);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: #fbfcfc;
+  resize: vertical;
+}
+
+.admin-field input:focus,
+.admin-field textarea:focus,
+.admin-field select:focus,
+.admin-row input:focus,
+.admin-row textarea:focus {
+  outline: none;
+  border-color: var(--ink);
+}
+
+.admin-mono {
+  font-family: var(--mono) !important;
+  font-size: 13px !important;
+}
+
+.admin-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.admin-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.admin-icon-btn {
+  flex-shrink: 0;
+  width: 32px;
+  height: 34px;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  background: var(--surface);
+  font-size: 13px;
+  line-height: 1;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.admin-icon-btn:hover:not(:disabled) {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.admin-icon-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.admin-icon-danger:hover:not(:disabled) {
+  color: var(--wine);
+  border-color: var(--wine);
+}
+
+.admin-add {
+  padding: 8px 16px;
+  border: 1px dashed var(--hairline);
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.admin-add:hover {
+  color: var(--wine);
+  border-color: var(--wine);
+}
+
+.admin-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.admin-item {
+  width: 100%;
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  background: #fbfcfc;
+  overflow: hidden;
+}
+
+.admin-item-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 8px 4px 4px;
+}
+
+.admin-item-title {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 0;
+  background: transparent;
+  font-family: var(--body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.admin-item-title em {
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+.admin-caret {
+  color: var(--ink-soft);
+  font-size: 11px;
+}
+
+.admin-item-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.admin-item-body {
+  padding: 16px 16px 8px;
+  border-top: 1px solid var(--hairline);
+  background: var(--surface);
+}
+
+@media (max-width: 640px) {
+  .admin-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}

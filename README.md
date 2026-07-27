@@ -49,8 +49,17 @@ Editable content lives in Firestore (Firebase project `levankantaria-portfolio`,
 docs `content/persona` and `content/site`) so text changes need no redeploy:
 
 - `/admin` — password-protected editor (Firebase Auth, only Levan's account can
-  write, enforced by `firestore.rules`). Edits the chatbot knowledge document,
-  the hero intro paragraph, and the "Open to work" badge.
+  write, enforced by `firestore.rules`). Tabs cover every piece of copy on the
+  site: hero and profile links, about paragraphs / skills / timeline, the
+  product cards (add, remove, reorder, store badges), the case studies
+  (Markdown bodies), and the chatbot's greeting, suggestions, and knowledge
+  document.
+- Firestore docs: `content/site`, `content/products`, `content/caseStudies`,
+  `content/persona`. Every field falls back to the baked-in defaults in
+  `src/lib/content.ts`, `src/data/products.ts` and `src/data/caseStudies.ts`,
+  so the site still renders if Firestore is unreachable.
+- `ACCESS_TOKEN=… npx tsx scripts/seed-content.ts` re-seeds those docs from the
+  baked-in defaults — handy to restore known-good content.
 - The chat function re-reads the knowledge doc at most every 60s and falls back
   to the baked-in copy in `api/_lib/persona.ts` if Firestore is unreachable.
 - The homepage hydrates hero fields from Firestore with baked-in defaults.

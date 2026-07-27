@@ -10,18 +10,6 @@ interface ChatMessage {
   content: string
 }
 
-const SUGGESTIONS = [
-  'What did Levan build at Bank of Georgia?',
-  'Tell me about MEGZURI',
-  'Is he available for hire?',
-]
-
-const GREETING: ChatMessage = {
-  role: 'assistant',
-  content:
-    "Hi! I'm Levan's assistant. Ask me anything about his experience, products, or how to get in touch.",
-}
-
 const ERROR_REPLY =
   "Something went wrong on my end. Try again in a moment, or email l.kantaria1999@gmail.com directly."
 
@@ -29,14 +17,35 @@ interface ChatState {
   messages: ChatMessage[]
   sending: boolean
   send: (text: string) => void
+  suggestions: string[]
 }
 
 const ChatContext = createContext<ChatState | null>(null)
 
 /** One shared conversation — the hero chat and the floating widget stay in sync. */
-export function ChatProvider({ children }: { children: ReactNode }) {
-  const [messages, setMessages] = useState<ChatMessage[]>([GREETING])
+export function ChatProvider({
+  children,
+  greeting,
+  suggestions,
+}: {
+  children: ReactNode
+  greeting: string
+  suggestions: string[]
+}) {
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    { role: 'assistant', content: greeting },
+  ])
   const [sending, setSending] = useState(false)
+
+  // The greeting arrives with the Firestore content fetch; swap it in as long
+  // as the visitor hasn't started talking yet.
+  useEffect(() => {
+    setMessages((m) =>
+      m.length === 1 && m[0].role === 'assistant'
+        ? [{ role: 'assistant', content: greeting }]
+        : m,
+    )
+  }, [greeting])
 
   async function send(text: string) {
     const question = text.trim().slice(0, MAX_MESSAGE_CHARS)
@@ -89,7 +98,11 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  return <ChatContext.Provider value={{ messages, sending, send }}>{children}</ChatContext.Provider>
+  return (
+    <ChatContext.Provider value={{ messages, sending, send, suggestions }}>
+      {children}
+    </ChatContext.Provider>
+  )
 }
 
 function useChat(): ChatState {
@@ -103,7 +116,7 @@ function Avatar() {
 }
 
 function ChatPanel({ autoFocus = false }: { autoFocus?: boolean }) {
-  const { messages, sending, send } = useChat()
+  const { messages, sending, send, suggestions } = useChat()
   const [input, setInput] = useState('')
   const logRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -132,7 +145,7 @@ function ChatPanel({ autoFocus = false }: { autoFocus?: boolean }) {
         ))}
         {messages.length === 1 && (
           <div className="chat-suggestions">
-            {SUGGESTIONS.map((s) => (
+            {suggestions.map((s) => (
               <button key={s} type="button" onClick={() => submit(s)}>
                 {s}
               </button>

@@ -1,10 +1,10 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
-import { products, type Product } from './data/products'
-import { fetchSiteContent, DEFAULT_SITE_CONTENT, type SiteContent } from './lib/content'
+import type { Product } from './data/products'
 import { ProductCard } from './components/ProductCard'
 import { PreviewModal } from './components/PreviewModal'
 import { ChatProvider, ChatWidget, HeroChat } from './components/Chat'
 import { CaseStudies } from './components/CaseStudies'
+import { fetchContent, DEFAULT_CONTENT, type AllContent } from './lib/content'
 import mePhoto from './assets/me-avatar.jpg'
 
 // Password-protected content editor, code-split so the public site never
@@ -13,65 +13,13 @@ const AdminPage = lazy(() => import('./admin/AdminPage'))
 const isAdminRoute =
   window.location.pathname === '/admin' || window.location.hash === '#/admin'
 
-const LINKS = {
-  linkedin: 'https://www.linkedin.com/in/levan-kantaria-bb223120b/',
-  cv: 'https://drive.google.com/file/d/19-35F4dmYZR8mYcoXGwL00XB_0QUZqqJ/view?usp=sharing',
-}
-
-const skills = [
-  {
-    label: 'Frontend',
-    items: 'React · TypeScript · Next.js · React Native · Redux · Tailwind CSS',
-  },
-  {
-    label: 'Backend',
-    items: 'Node.js · Express · GraphQL · PostgreSQL · MongoDB · Firebase · AWS',
-  },
-  {
-    label: 'AI-assisted development',
-    items: 'Claude Code · Cursor · OpenAI · rapid prototyping · structured prompt workflows',
-  },
-]
-
-const experience = [
-  {
-    period: '2023 — 2026',
-    role: 'Senior Web Developer / Analyst',
-    place: 'Bank of Georgia',
-    note: 'Led frontend delivery for Visa/MasterCard payment platforms in the online payments division.',
-  },
-  {
-    period: '2025 — present',
-    role: 'Founder & Full-stack Developer',
-    place: 'MEGZURI · MakersHub',
-    note: 'Building and launching my own products end to end — mobile, web, backend, and data pipelines.',
-  },
-  {
-    period: '2022',
-    role: 'React Developer',
-    place: 'Manufacture',
-    note: 'Manufacturing workflow and middleware platform connecting clients — manufactured.com.',
-  },
-  {
-    period: '2021 — 2022',
-    role: 'Full-stack Developer',
-    place: 'ITechArt',
-    note: 'Luxury travel platform: authenticated user flows and full-stack features with React, TypeScript, GraphQL, and Node.js.',
-  },
-  {
-    period: '2020 — 2021',
-    role: 'Freelancer',
-    place: 'Independent clients',
-    note: 'Gamiyole carpool app and a Node.js trading bot on Discord, Binance, and TradingView APIs.',
-  },
-]
-
 export default function App() {
   const [open, setOpen] = useState<Product | null>(null)
-  const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
+  const [{ site, products, caseStudies }, setContent] =
+    useState<AllContent>(DEFAULT_CONTENT)
 
   useEffect(() => {
-    if (!isAdminRoute) fetchSiteContent().then(setContent)
+    if (!isAdminRoute) fetchContent().then(setContent)
   }, [])
 
   if (isAdminRoute) {
@@ -83,7 +31,7 @@ export default function App() {
   }
 
   return (
-    <ChatProvider>
+    <ChatProvider greeting={site.chatGreeting} suggestions={site.chatSuggestions}>
       <header className="topbar">
         <div className="container topbar-inner">
           <a className="wordmark" href="#top">
@@ -91,9 +39,9 @@ export default function App() {
           </a>
           <nav aria-label="Sections">
             <a href="#products">Products</a>
-            <a href="#case-studies">Case studies</a>
+            {caseStudies.length > 0 && <a href="#case-studies">Case studies</a>}
             <a href="#about">About</a>
-            <a href="mailto:l.kantaria1999@gmail.com">Contact</a>
+            <a href={`mailto:${site.email}`}>Contact</a>
           </nav>
         </div>
       </header>
@@ -102,17 +50,17 @@ export default function App() {
         <section className="hero container">
           <div className="hero-grid">
             <div className="hero-copy">
-              <p className="eyebrow">Full-stack · React / TypeScript · Tbilisi, Georgia</p>
+              <p className="eyebrow">{site.eyebrow}</p>
               <h1>
-                Shipped, and <em>still running</em>.
+                {site.titleLead} <em>{site.titleAccent}</em>.
               </h1>
-              <p className="hero-lede">{content.heroLede}</p>
+              <p className="hero-lede">{site.heroLede}</p>
               <div className="hero-actions">
                 <a className="btn btn-primary" href="#products">
-                  See the products
+                  {site.ctaLabel}
                 </a>
-                <a className="btn" href="mailto:l.kantaria1999@gmail.com">
-                  l.kantaria1999@gmail.com
+                <a className="btn" href={`mailto:${site.email}`}>
+                  {site.email}
                 </a>
               </div>
             </div>
@@ -120,7 +68,7 @@ export default function App() {
               <div className="hero-profile">
                 <div className="hero-avatar-wrap">
                   <img className="hero-avatar" src={mePhoto} alt="Levan Kantaria" />
-                  {content.openToWork && (
+                  {site.openToWork && (
                     <span className="open-badge">
                       <span className="live-dot" aria-hidden="true" />
                       Open to work
@@ -128,26 +76,25 @@ export default function App() {
                   )}
                 </div>
                 <div className="profile-links">
-                  <a
-                    className="profile-icon"
-                    href={LINKS.linkedin}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label="Levan on LinkedIn"
-                    title="LinkedIn"
-                  >
-                    <svg viewBox="0 0 448 512" width="16" height="16" fill="currentColor" aria-hidden="true">
-                      <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z" />
-                    </svg>
-                  </a>
-                  <a
-                    className="btn-cv"
-                    href={LINKS.cv}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Download CV ↗
-                  </a>
+                  {site.linkedin && (
+                    <a
+                      className="profile-icon"
+                      href={site.linkedin}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label="Levan on LinkedIn"
+                      title="LinkedIn"
+                    >
+                      <svg viewBox="0 0 448 512" width="16" height="16" fill="currentColor" aria-hidden="true">
+                        <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z" />
+                      </svg>
+                    </a>
+                  )}
+                  {site.cv && (
+                    <a className="btn-cv" href={site.cv} target="_blank" rel="noreferrer">
+                      Download CV ↗
+                    </a>
+                  )}
                 </div>
               </div>
               <HeroChat />
@@ -158,7 +105,7 @@ export default function App() {
         <section id="products" className="container products">
           <div className="section-head">
             <h2>Products</h2>
-            <p>Real screenshots, real domains. Click a card for a live preview.</p>
+            <p>{site.productsNote}</p>
           </div>
           <div className="product-grid">
             {products.map((p) => (
@@ -167,7 +114,7 @@ export default function App() {
           </div>
         </section>
 
-        <CaseStudies />
+        <CaseStudies studies={caseStudies} note={site.caseStudiesNote} />
 
         <section id="about" className="container about">
           <div className="section-head">
@@ -175,22 +122,11 @@ export default function App() {
           </div>
           <div className="about-cols">
             <div className="about-text">
-              <p>
-                Full-stack engineer with a frontend core — 5+ years building
-                production fintech interfaces, payment flows, and
-                product-focused web and mobile apps. At Bank of Georgia I led
-                a frontend team in the online payments division until 2026;
-                these days I take products from idea to launch on my own —
-                most recently MEGZURI, an average-speed tracking app for
-                Georgian drivers.
-              </p>
-              <p>
-                I care about clear UX, clean architecture, and measurable
-                business impact — and I work AI-assisted, using Claude Code and
-                Cursor as part of a structured development workflow.
-              </p>
+              {site.aboutParagraphs.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
               <dl className="skills">
-                {skills.map((s) => (
+                {site.skills.map((s) => (
                   <div key={s.label} className="skills-row">
                     <dt>{s.label}</dt>
                     <dd>{s.items}</dd>
@@ -199,8 +135,8 @@ export default function App() {
               </dl>
             </div>
             <ol className="timeline">
-              {experience.map((e) => (
-                <li key={e.role}>
+              {site.timeline.map((e, i) => (
+                <li key={`${e.role}-${i}`}>
                   <span className="timeline-period">{e.period}</span>
                   <strong>{e.role}</strong>
                   <span className="timeline-place">{e.place}</span>
@@ -215,12 +151,10 @@ export default function App() {
       <footer className="footer">
         <div className="container footer-inner">
           <p>
-            Levan Kantaria · Tbilisi, Georgia ·{' '}
-            <a href="mailto:l.kantaria1999@gmail.com">l.kantaria1999@gmail.com</a>
+            Levan Kantaria · {site.footerLocation} ·{' '}
+            <a href={`mailto:${site.email}`}>{site.email}</a>
           </p>
-          <p className="footer-note">
-            Built with React, TypeScript, and Vite.
-          </p>
+          <p className="footer-note">{site.footerNote}</p>
         </div>
       </footer>
 

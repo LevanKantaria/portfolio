@@ -16,7 +16,8 @@ export interface Product {
   playStore?: string | null
 }
 
-export const products: Product[] = [
+/** Seed content and offline fallback — the live copy lives in Firestore. */
+export const DEFAULT_PRODUCTS: Product[] = [
   {
     id: 'megzuri',
     name: 'MEGZURI',
