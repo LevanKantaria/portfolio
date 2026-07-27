@@ -1865,3 +1865,86 @@ a.store-icon:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- admin: theme picker ---------- */
+
+.theme-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.theme-option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 16px;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background: var(--surface);
+  font-family: var(--body);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.theme-option:hover {
+  transform: translateY(-2px);
+  border-color: var(--ink);
+}
+
+.theme-option-on {
+  border-color: var(--wine);
+  box-shadow: 0 0 0 1px var(--wine);
+}
+
+.theme-option strong {
+  font-family: var(--display);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.theme-blurb {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.theme-current {
+  margin-top: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--wine);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.theme-swatch {
+  display: flex;
+  width: 100%;
+  height: 54px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.theme-swatch i {
+  flex: 1;
+}
+
+.theme-swatch-porcelain i:nth-child(1) { background: #eef0ef; }
+.theme-swatch-porcelain i:nth-child(2) { background: #ffffff; }
+.theme-swatch-porcelain i:nth-child(3) { background: #b32d2d; flex: 0 0 22%; }
+
+.theme-swatch-instrument i:nth-child(1) { background: #080b11; }
+.theme-swatch-instrument i:nth-child(2) { background: #131c28; }
+.theme-swatch-instrument i:nth-child(3) { background: #35d6e8; flex: 0 0 22%; }
+
+.theme-swatch-press i:nth-child(1) { background: #ffffff; border: 1px solid #0c0c0f; }
+.theme-swatch-press i:nth-child(2) { background: #0c0c0f; }
+.theme-swatch-press i:nth-child(3) { background: #2b36e8; flex: 0 0 22%; }

@@ -11,7 +11,9 @@ import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore'
 import {
   FIREBASE_CONFIG,
   DEFAULT_SITE_CONTENT,
+  THEMES,
   type SiteContent,
+  type Theme,
   type Product,
   type CaseStudy,
 } from '../lib/content'
@@ -28,7 +30,7 @@ function clean<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T
 }
 
-const TABS = ['Hero & profile', 'About', 'Products', 'Case studies', 'Chatbot'] as const
+const TABS = ['Appearance', 'Hero & profile', 'About', 'Products', 'Case studies', 'Chatbot'] as const
 type Tab = (typeof TABS)[number]
 
 type SaveState = 'idle' | 'saving' | 'saved' | 'error'
@@ -93,7 +95,7 @@ function StoreField({
 }
 
 function Editor({ user }: { user: User }) {
-  const [tab, setTab] = useState<Tab>('Hero & profile')
+  const [tab, setTab] = useState<Tab>('Appearance')
   const [site, setSite] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
   const [products, setProducts] = useState<Product[]>(DEFAULT_PRODUCTS)
   const [studies, setStudies] = useState<CaseStudy[]>(DEFAULT_CASE_STUDIES)
@@ -174,6 +176,36 @@ function Editor({ user }: { user: User }) {
       </nav>
 
       <SaveBar state={saveState} dirty={dirty} onSave={save} />
+
+      {tab === 'Appearance' && (
+        <section className="admin-section">
+          <p className="admin-hint">
+            Pick how the whole site looks. The change is live for visitors as soon
+            as you save — same content, different design system.
+          </p>
+          <div className="theme-picker">
+            {THEMES.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                className={
+                  site.theme === t.id ? 'theme-option theme-option-on' : 'theme-option'
+                }
+                onClick={() => setSiteField('theme')(t.id as Theme)}
+              >
+                <span className={`theme-swatch theme-swatch-${t.id}`} aria-hidden="true">
+                  <i />
+                  <i />
+                  <i />
+                </span>
+                <strong>{t.name}</strong>
+                <span className="theme-blurb">{t.blurb}</span>
+                {site.theme === t.id && <span className="theme-current">In use</span>}
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
 
       {tab === 'Hero & profile' && (
         <section className="admin-section">

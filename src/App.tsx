@@ -4,7 +4,13 @@ import { ProductCard } from './components/ProductCard'
 import { PreviewModal } from './components/PreviewModal'
 import { ChatProvider, ChatWidget, HeroChat } from './components/Chat'
 import { CaseStudies } from './components/CaseStudies'
-import { fetchContent, DEFAULT_CONTENT, type AllContent } from './lib/content'
+import {
+  fetchContent,
+  applyTheme,
+  applyCachedTheme,
+  DEFAULT_CONTENT,
+  type AllContent,
+} from './lib/content'
 import mePhoto from './assets/me-avatar.jpg'
 
 // Password-protected content editor, code-split so the public site never
@@ -13,13 +19,20 @@ const AdminPage = lazy(() => import('./admin/AdminPage'))
 const isAdminRoute =
   window.location.pathname === '/admin' || window.location.hash === '#/admin'
 
+// Paint the theme this visitor saw last, before React renders anything.
+if (!isAdminRoute) applyCachedTheme()
+
 export default function App() {
   const [open, setOpen] = useState<Product | null>(null)
   const [{ site, products, caseStudies }, setContent] =
     useState<AllContent>(DEFAULT_CONTENT)
 
   useEffect(() => {
-    if (!isAdminRoute) fetchContent().then(setContent)
+    if (isAdminRoute) return
+    fetchContent().then((c) => {
+      applyTheme(c.site.theme)
+      setContent(c)
+    })
   }, [])
 
   if (isAdminRoute) {

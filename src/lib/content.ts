@@ -33,7 +33,29 @@ export interface TimelineEntry {
   note: string
 }
 
+export type Theme = 'porcelain' | 'instrument' | 'press'
+
+export const THEMES: { id: Theme; name: string; blurb: string }[] = [
+  {
+    id: 'porcelain',
+    name: 'Porcelain',
+    blurb: 'Quiet editorial. Soft grey paper, wine accent, calm cards.',
+  },
+  {
+    id: 'instrument',
+    name: 'Instrument',
+    blurb: 'Dark cockpit. Telemetry panels, cyan and amber readouts, mono labels.',
+  },
+  {
+    id: 'press',
+    name: 'Press',
+    blurb: 'Signage poster. Huge type, ultramarine, hard-edged blocks.',
+  },
+]
+
 export interface SiteContent {
+  /* appearance */
+  theme: Theme
   /* hero */
   eyebrow: string
   titleLead: string
@@ -61,6 +83,7 @@ export interface SiteContent {
 }
 
 export const DEFAULT_SITE_CONTENT: SiteContent = {
+  theme: 'porcelain',
   eyebrow: 'Full-stack · React / TypeScript · Tbilisi, Georgia',
   titleLead: 'Shipped, and',
   titleAccent: 'still running',
@@ -212,7 +235,11 @@ function pick<T>(stored: unknown, fallback: T): T {
 function mergeSite(stored: Record<string, unknown> | null): SiteContent {
   if (!stored) return DEFAULT_SITE_CONTENT
   const d = DEFAULT_SITE_CONTENT
+  const theme = THEMES.some((t) => t.id === stored.theme)
+    ? (stored.theme as Theme)
+    : d.theme
   return {
+    theme,
     eyebrow: pick(stored.eyebrow, d.eyebrow),
     titleLead: pick(stored.titleLead, d.titleLead),
     titleAccent: pick(stored.titleAccent, d.titleAccent),
@@ -244,5 +271,31 @@ export async function fetchContent(): Promise<AllContent> {
     site: mergeSite(site),
     products: pick(products?.items, DEFAULT_PRODUCTS),
     caseStudies: pick(caseStudies?.items, DEFAULT_CASE_STUDIES),
+  }
+}
+
+/* ---------- theme ---------- */
+
+const THEME_KEY = 'lk-theme'
+
+/** Apply immediately and remember it, so repeat visits don't flash the default. */
+export function applyTheme(theme: Theme) {
+  document.documentElement.dataset.theme = theme
+  try {
+    localStorage.setItem(THEME_KEY, theme)
+  } catch {
+    // private mode — the theme still applies for this page view
+  }
+}
+
+/** Last theme this visitor saw; used for the very first paint. */
+export function applyCachedTheme() {
+  try {
+    const cached = localStorage.getItem(THEME_KEY)
+    if (cached && THEMES.some((t) => t.id === cached)) {
+      document.documentElement.dataset.theme = cached
+    }
+  } catch {
+    // ignore
   }
 }

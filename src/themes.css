@@ -1,0 +1,663 @@
+/**
+ * Alternate looks, selected in /admin and applied as html[data-theme].
+ * Loaded after index.css; every rule here is scoped to a theme, so the
+ * default "porcelain" look is untouched.
+ */
+
+/* =========================================================================
+   INSTRUMENT — dark cockpit. Telemetry panels, cyan + amber readouts,
+   monospace labels. Borrowed from MEGZURI's automotive UI language.
+   ========================================================================= */
+
+html[data-theme='instrument'] {
+  --porcelain: #080b11;
+  --surface: #111823;
+  --ink: #e6eef7;
+  --ink-soft: #8ba0b8;
+  --hairline: #22303f;
+  --wine: #35d6e8; /* primary accent */
+  --live: #58e08f;
+  --live-soft: rgba(53, 214, 232, 0.12);
+  --amber: #ffb020;
+
+  --display: 'Space Grotesk', 'Avenir Next', sans-serif;
+  --body: 'Space Grotesk', 'Helvetica Neue', sans-serif;
+}
+
+[data-theme='instrument'] body {
+  background:
+    radial-gradient(900px 500px at 78% -8%, rgba(53, 214, 232, 0.13), transparent 70%),
+    linear-gradient(transparent 96%, rgba(53, 214, 232, 0.045) 96%) 0 0 / 100% 26px,
+    var(--porcelain);
+}
+
+[data-theme='instrument'] .topbar {
+  background: rgba(8, 11, 17, 0.82);
+  border-bottom-color: var(--hairline);
+}
+
+[data-theme='instrument'] .topbar nav a,
+[data-theme='instrument'] .wordmark {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+[data-theme='instrument'] .wordmark {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--wine);
+}
+
+[data-theme='instrument'] .eyebrow {
+  color: var(--wine);
+}
+
+[data-theme='instrument'] .hero h1 {
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+[data-theme='instrument'] .hero h1 em {
+  color: var(--wine);
+  text-shadow: 0 0 34px rgba(53, 214, 232, 0.45);
+}
+
+[data-theme='instrument'] .btn {
+  border-color: var(--hairline);
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+[data-theme='instrument'] .btn-primary {
+  background: var(--wine);
+  border-color: var(--wine);
+  color: #05202a;
+}
+
+[data-theme='instrument'] .btn-primary:hover {
+  background: #6fe6f3;
+  border-color: #6fe6f3;
+}
+
+[data-theme='instrument'] .btn:not(.btn-primary):hover {
+  border-color: var(--wine);
+  color: var(--wine);
+}
+
+/* profile block reads as a status panel */
+[data-theme='instrument'] .hero-avatar {
+  border-color: var(--surface);
+  box-shadow: 0 0 0 1px var(--wine), 0 0 36px rgba(53, 214, 232, 0.28);
+}
+
+[data-theme='instrument'] .open-badge {
+  background: rgba(255, 176, 32, 0.12);
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+[data-theme='instrument'] .open-badge .live-dot {
+  background: var(--amber);
+  animation: none;
+  box-shadow: 0 0 10px var(--amber);
+}
+
+[data-theme='instrument'] .profile-icon {
+  background: var(--surface);
+  border-radius: 6px;
+}
+
+[data-theme='instrument'] .btn-cv {
+  border-radius: 6px;
+  background: var(--amber);
+  color: #2a1a00;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+[data-theme='instrument'] .btn-cv:hover {
+  background: #ffc44f;
+}
+
+[data-theme='instrument'] .section-head h2 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+[data-theme='instrument'] .section-head h2::before {
+  content: '// ';
+  color: var(--wine);
+  font-family: var(--mono);
+  font-size: 0.6em;
+  vertical-align: 0.28em;
+}
+
+/* products become wide telemetry panels rather than a grid of cards */
+[data-theme='instrument'] .product-grid {
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+[data-theme='instrument'] .card {
+  display: grid;
+  grid-template-columns: minmax(0, 380px) minmax(0, 1fr);
+  border-radius: 10px;
+  border-color: var(--hairline);
+  background: linear-gradient(180deg, #131c28, #0e151f);
+}
+
+[data-theme='instrument'] .card:hover {
+  transform: none;
+  border-color: var(--wine);
+  box-shadow: 0 0 0 1px rgba(53, 214, 232, 0.35), 0 18px 44px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme='instrument'] .card-shot {
+  aspect-ratio: auto;
+  min-height: 210px;
+  border-bottom: 0;
+  border-right: 1px solid var(--hairline);
+  background: #0a1017;
+}
+
+[data-theme='instrument'] .card-role {
+  color: var(--wine);
+  font-family: var(--mono);
+  font-size: 11.5px;
+}
+
+[data-theme='instrument'] .card-period,
+[data-theme='instrument'] .card-domain {
+  color: var(--ink-soft);
+}
+
+[data-theme='instrument'] .card-stack li {
+  border-radius: 4px;
+  border-color: var(--hairline);
+  background: rgba(53, 214, 232, 0.06);
+}
+
+[data-theme='instrument'] .store-icon {
+  border-radius: 6px;
+  border-color: var(--hairline);
+}
+
+[data-theme='instrument'] .case-card,
+[data-theme='instrument'] .case-modal {
+  background: linear-gradient(180deg, #131c28, #0e151f);
+  border-color: var(--hairline);
+  border-radius: 10px;
+}
+
+[data-theme='instrument'] .case-card:hover {
+  transform: none;
+  border-color: var(--wine);
+  box-shadow: 0 0 0 1px rgba(53, 214, 232, 0.3);
+}
+
+[data-theme='instrument'] .case-more {
+  color: var(--wine);
+}
+
+[data-theme='instrument'] .case-modal-head {
+  background: #0d141d;
+}
+
+[data-theme='instrument'] .skills-row dt {
+  color: var(--wine);
+  font-family: var(--mono);
+}
+
+[data-theme='instrument'] .timeline li::before {
+  background: var(--wine);
+  border-color: var(--porcelain);
+  box-shadow: 0 0 12px rgba(53, 214, 232, 0.6);
+}
+
+[data-theme='instrument'] .timeline-place {
+  color: var(--wine);
+}
+
+[data-theme='instrument'] .footer {
+  border-top-color: var(--hairline);
+}
+
+/* chat surfaces sit on the same panel palette */
+[data-theme='instrument'] .hero-chat,
+[data-theme='instrument'] .hero-chat-launcher {
+  background: linear-gradient(180deg, #131c28, #0e151f);
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+[data-theme='instrument'] .hero-chat-launcher:hover {
+  transform: none;
+  border-color: var(--wine);
+}
+
+[data-theme='instrument'] .hero-chat .chat-input button {
+  background: var(--wine);
+  color: #05202a;
+}
+
+[data-theme='instrument'] .chat-fab {
+  background: var(--wine);
+  color: #05202a;
+}
+
+[data-theme='instrument'] .chat-fab:hover {
+  background: #6fe6f3;
+}
+
+[data-theme='instrument'] .chat-panel {
+  background: var(--surface);
+  border-color: var(--hairline);
+}
+
+[data-theme='instrument'] .chat-head {
+  background: #0d141d;
+  border-bottom-color: var(--hairline);
+}
+
+[data-theme='instrument'] .chat-msg-assistant {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--hairline);
+  color: var(--ink);
+}
+
+[data-theme='instrument'] .chat-msg-user {
+  background: var(--wine);
+  color: #05202a;
+}
+
+[data-theme='instrument'] .chat-suggestions button,
+[data-theme='instrument'] .chat-input input {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--hairline);
+  color: var(--ink);
+}
+
+[data-theme='instrument'] .browser-bar,
+[data-theme='instrument'] .browser-url,
+[data-theme='instrument'] .browser-close {
+  background: #0d141d;
+  border-color: var(--hairline);
+  color: var(--ink);
+}
+
+@media (max-width: 760px) {
+  [data-theme='instrument'] .card {
+    grid-template-columns: 1fr;
+  }
+
+  [data-theme='instrument'] .card-shot {
+    border-right: 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+}
+
+/* =========================================================================
+   PRESS — signage poster. Heavy Archivo caps, ultramarine, thick rules and
+   hard-edged blocks. Loud where Porcelain is quiet.
+   ========================================================================= */
+
+html[data-theme='press'] {
+  --porcelain: #ffffff;
+  --surface: #ffffff;
+  --ink: #0c0c0f;
+  --ink-soft: #56565f;
+  --hairline: #0c0c0f;
+  --wine: #2b36e8; /* ultramarine */
+  --live: #12a150;
+  --live-soft: #e4f5ea;
+
+  --display: 'Archivo', 'Helvetica Neue', sans-serif;
+}
+
+[data-theme='press'] .topbar {
+  background: #fff;
+  border-bottom: 2px solid var(--ink);
+  backdrop-filter: none;
+}
+
+[data-theme='press'] .wordmark {
+  font-weight: 900;
+  font-size: 17px;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+[data-theme='press'] .topbar nav a {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+[data-theme='press'] .topbar nav a:hover {
+  color: var(--wine);
+}
+
+[data-theme='press'] .eyebrow {
+  display: inline-block;
+  padding: 5px 12px;
+  background: var(--ink);
+  color: #fff;
+  letter-spacing: 0.12em;
+}
+
+[data-theme='press'] .hero h1 {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(48px, 9vw, 104px);
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  max-width: 12ch;
+}
+
+[data-theme='press'] .hero h1 em {
+  color: var(--wine);
+  white-space: normal;
+}
+
+[data-theme='press'] .hero-lede {
+  font-size: 19px;
+  color: var(--ink);
+  border-left: 4px solid var(--wine);
+  padding-left: 18px;
+}
+
+[data-theme='press'] .btn {
+  border-width: 2px;
+  border-radius: 2px;
+  font-family: var(--display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+[data-theme='press'] .btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+[data-theme='press'] .btn-primary {
+  background: var(--wine);
+  border-color: var(--wine);
+  color: #fff;
+}
+
+[data-theme='press'] .btn-primary:hover {
+  background: var(--wine);
+  border-color: var(--wine);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+[data-theme='press'] .hero-avatar {
+  border-radius: 2px;
+  border: 3px solid var(--ink);
+  box-shadow: 8px 8px 0 var(--wine);
+}
+
+[data-theme='press'] .open-badge {
+  border-radius: 2px;
+  background: var(--wine);
+  border-color: var(--ink);
+  border-width: 2px;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+[data-theme='press'] .open-badge .live-dot {
+  background: #fff;
+  animation: none;
+  box-shadow: none;
+}
+
+[data-theme='press'] .profile-icon {
+  border-radius: 2px;
+  border-width: 2px;
+}
+
+[data-theme='press'] .btn-cv {
+  border-radius: 2px;
+  border: 2px solid var(--ink);
+  background: var(--ink);
+  font-family: var(--display);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+[data-theme='press'] .btn-cv:hover {
+  background: var(--wine);
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+[data-theme='press'] .section-head {
+  align-items: flex-end;
+  padding-bottom: 12px;
+  border-bottom: 4px solid var(--ink);
+}
+
+[data-theme='press'] .section-head h2 {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(34px, 5.5vw, 60px);
+  line-height: 0.95;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+}
+
+[data-theme='press'] .section-head p {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* poster blocks: thick outline, hard shadow, no float */
+[data-theme='press'] .card,
+[data-theme='press'] .case-card {
+  border: 2px solid var(--ink);
+  border-radius: 2px;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+[data-theme='press'] .card:hover,
+[data-theme='press'] .case-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0 var(--wine);
+}
+
+/* first product runs full width, like a lead poster */
+[data-theme='press'] .product-grid > .card:first-child {
+  grid-column: 1 / -1;
+}
+
+[data-theme='press'] .product-grid > .card:first-child .card-shot {
+  aspect-ratio: 21 / 8;
+}
+
+[data-theme='press'] .card-shot {
+  border-bottom: 2px solid var(--ink);
+}
+
+[data-theme='press'] .card-head h3,
+[data-theme='press'] .case-card h3,
+[data-theme='press'] .case-modal-body h3 {
+  font-family: var(--display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+[data-theme='press'] .card-role {
+  color: var(--wine);
+  font-weight: 700;
+}
+
+[data-theme='press'] .card-stack li {
+  border-radius: 2px;
+  border-width: 1.5px;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+[data-theme='press'] .store-icon {
+  border-radius: 2px;
+  border-width: 2px;
+}
+
+[data-theme='press'] .case-eyebrow,
+[data-theme='press'] .case-more {
+  color: var(--wine);
+  font-weight: 600;
+}
+
+[data-theme='press'] .case-modal {
+  border: 3px solid var(--ink);
+  border-radius: 2px;
+}
+
+[data-theme='press'] .skills {
+  border-top: 3px solid var(--ink);
+}
+
+[data-theme='press'] .skills-row {
+  border-bottom-width: 2px;
+}
+
+[data-theme='press'] .skills-row dt {
+  font-family: var(--display);
+  font-weight: 800;
+}
+
+[data-theme='press'] .timeline li {
+  border-left-width: 3px;
+  border-left-color: var(--ink);
+}
+
+[data-theme='press'] .timeline li::before {
+  border-radius: 2px;
+  background: var(--wine);
+  border-color: #fff;
+  left: -8px;
+}
+
+[data-theme='press'] .timeline strong {
+  font-family: var(--display);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 17px;
+}
+
+[data-theme='press'] .timeline-place {
+  color: var(--wine);
+}
+
+[data-theme='press'] .footer {
+  border-top: 4px solid var(--ink);
+  background: var(--ink);
+  color: #fff;
+  margin-top: 40px;
+}
+
+[data-theme='press'] .footer a,
+[data-theme='press'] .footer-inner {
+  color: #fff;
+}
+
+/* chat: black block with an ultramarine send */
+[data-theme='press'] .hero-chat,
+[data-theme='press'] .hero-chat-launcher {
+  border-radius: 2px;
+  border: 2px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--wine);
+}
+
+[data-theme='press'] .hero-chat-launcher:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0 var(--wine);
+}
+
+[data-theme='press'] .launcher-text strong,
+[data-theme='press'] .hero-chat .chat-head strong {
+  font-family: var(--display);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+[data-theme='press'] .hero-chat .avatar {
+  border-radius: 2px;
+}
+
+[data-theme='press'] .hero-chat .chat-input button {
+  border-radius: 2px;
+  background: var(--wine);
+  font-family: var(--display);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+[data-theme='press'] .chat-fab {
+  border-radius: 2px;
+  border: 2px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--wine);
+}
+
+[data-theme='press'] .chat-panel {
+  border: 2px solid var(--ink);
+  border-radius: 2px;
+  box-shadow: 8px 8px 0 var(--wine);
+}
+
+[data-theme='press'] .chat-msg-user {
+  border-radius: 2px;
+  background: var(--wine);
+}
+
+[data-theme='press'] .chat-msg-assistant {
+  border-radius: 2px;
+  background: #f1f1f5;
+}
+
+[data-theme='press'] .chat-input button,
+[data-theme='press'] .chat-suggestions button {
+  border-radius: 2px;
+}
+
+/* Chat panels are dark in every theme, so text that the base sheet paints with
+   --porcelain needs re-lighting once --porcelain itself becomes the dark page. */
+[data-theme='instrument'] .launcher-text strong,
+[data-theme='instrument'] .hero-chat .chat-head strong,
+[data-theme='instrument'] .hero-chat .chat-msg-assistant,
+[data-theme='instrument'] .hero-chat .chat-input input {
+  color: var(--ink);
+}
+
+[data-theme='instrument'] .hero-chat .chat-msg-user {
+  background: var(--wine);
+  color: #05202a;
+}
+
+[data-theme='instrument'] .chat-input button {
+  background: var(--wine);
+  color: #05202a;
+}
+
+[data-theme='instrument'] .chat-close:hover {
+  background: rgba(53, 214, 232, 0.14);
+  color: var(--wine);
+}
