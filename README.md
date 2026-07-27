@@ -42,3 +42,17 @@ Setup:
 
 To change what the bot knows or how it behaves, edit `EXPERIENCE_MD` and the
 prompts in `api/_lib/persona.ts`.
+
+## Dynamic content & admin
+
+Editable content lives in Firestore (Firebase project `levankantaria-portfolio`,
+docs `content/persona` and `content/site`) so text changes need no redeploy:
+
+- `/admin` — password-protected editor (Firebase Auth, only Levan's account can
+  write, enforced by `firestore.rules`). Edits the chatbot knowledge document,
+  the hero intro paragraph, and the "Open to work" badge.
+- The chat function re-reads the knowledge doc at most every 60s and falls back
+  to the baked-in copy in `api/_lib/persona.ts` if Firestore is unreachable.
+- The homepage hydrates hero fields from Firestore with baked-in defaults.
+
+Deploy rules with `firebase deploy --only firestore:rules`.
