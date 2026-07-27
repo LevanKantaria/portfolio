@@ -1,7 +1,8 @@
 import Anthropic from '@anthropic-ai/sdk'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import {
-  ANSWER_SYSTEM,
+  EXPERIENCE_MD,
+  buildAnswerSystem,
   FILTER_SYSTEM,
   OFF_TOPIC_REPLY,
   MAX_MESSAGE_CHARS,
@@ -20,6 +21,34 @@ const ANSWER_MAX_TOKENS = 700
 const RATE_LIMIT = 20
 const RATE_WINDOW_MS = 10 * 60 * 1000
 const hits = new Map<string, number[]>()
+
+// The experience document lives in Firestore so Levan can edit it from /admin
+// without redeploying. Cached per warm instance; falls back to the baked-in
+// copy if Firestore is unreachable.
+const FIRESTORE_DOC =
+  'https://firestore.googleapis.com/v1/projects/levankantaria-portfolio/databases/(default)/documents/content/persona'
+const EXPERIENCE_CACHE_MS = 60 * 1000
+let cachedExperience = EXPERIENCE_MD
+let cachedAt = 0
+
+async function getExperience(): Promise<string> {
+  const now = Date.now()
+  if (now - cachedAt < EXPERIENCE_CACHE_MS) return cachedExperience
+  try {
+    const res = await fetch(FIRESTORE_DOC, { signal: AbortSignal.timeout(3000) })
+    if (res.ok) {
+      const doc = (await res.json()) as {
+        fields?: { experienceMd?: { stringValue?: string } }
+      }
+      const md = doc.fields?.experienceMd?.stringValue
+      if (md && md.trim().length > 0) cachedExperience = md
+    }
+  } catch {
+    // keep whatever we had — worst case the baked-in fallback
+  }
+  cachedAt = now
+  return cachedExperience
+}
 
 function rateLimited(ip: string): boolean {
   const now = Date.now()
@@ -143,7 +172,13 @@ export async function chatHandler(req: Request): Promise<Response> {
     // at low effort for faster, cheaper replies.
     thinking: { type: 'disabled' },
     output_config: { effort: 'low' },
-    system: [{ type: 'text', text: ANSWER_SYSTEM, cache_control: { type: 'ephemeral' } }],
+    system: [
+      {
+        type: 'text',
+        text: buildAnswerSystem(await getExperience()),
+        cache_control: { type: 'ephemeral' },
+      },
+    ],
     messages,
   })
 

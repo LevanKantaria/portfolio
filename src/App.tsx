@@ -1,10 +1,17 @@
-import { useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { products, type Product } from './data/products'
+import { fetchSiteContent, DEFAULT_SITE_CONTENT, type SiteContent } from './lib/content'
 import { ProductCard } from './components/ProductCard'
 import { PreviewModal } from './components/PreviewModal'
 import { ChatProvider, ChatWidget, HeroChat } from './components/Chat'
 import { CaseStudies } from './components/CaseStudies'
 import mePhoto from './assets/me-avatar.jpg'
+
+// Password-protected content editor, code-split so the public site never
+// loads the Firebase SDK.
+const AdminPage = lazy(() => import('./admin/AdminPage'))
+const isAdminRoute =
+  window.location.pathname === '/admin' || window.location.hash === '#/admin'
 
 const LINKS = {
   linkedin: 'https://www.linkedin.com/in/levan-kantaria-bb223120b/',
@@ -61,6 +68,19 @@ const experience = [
 
 export default function App() {
   const [open, setOpen] = useState<Product | null>(null)
+  const [content, setContent] = useState<SiteContent>(DEFAULT_SITE_CONTENT)
+
+  useEffect(() => {
+    if (!isAdminRoute) fetchSiteContent().then(setContent)
+  }, [])
+
+  if (isAdminRoute) {
+    return (
+      <Suspense fallback={<p style={{ padding: 40 }}>Loading admin…</p>}>
+        <AdminPage />
+      </Suspense>
+    )
+  }
 
   return (
     <ChatProvider>
@@ -86,13 +106,7 @@ export default function App() {
               <h1>
                 Shipped, and <em>still running</em>.
               </h1>
-              <p className="hero-lede">
-                I'm a full-stack engineer with a frontend core. I've shipped
-                payment platforms for one of Georgia's largest banks, launched
-                my own apps for drivers and makers, and built AI into real
-                products — including the assistant on this page. Everything
-                here is live: open any card and use the real thing.
-              </p>
+              <p className="hero-lede">{content.heroLede}</p>
               <div className="hero-actions">
                 <a className="btn btn-primary" href="#products">
                   See the products
@@ -106,10 +120,12 @@ export default function App() {
               <div className="hero-profile">
                 <div className="hero-avatar-wrap">
                   <img className="hero-avatar" src={mePhoto} alt="Levan Kantaria" />
-                  <span className="open-badge">
-                    <span className="live-dot" aria-hidden="true" />
-                    Open to work
-                  </span>
+                  {content.openToWork && (
+                    <span className="open-badge">
+                      <span className="live-dot" aria-hidden="true" />
+                      Open to work
+                    </span>
+                  )}
                 </div>
                 <div className="profile-links">
                   <a

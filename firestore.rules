@@ -1,0 +1,17 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Site content: anyone can read (the site and chat function need it),
+    // only Levan's authenticated account can write.
+    match /content/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.auth.token.email == 'l.kantaria1999@gmail.com';
+    }
+
+    // Everything else: locked.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
