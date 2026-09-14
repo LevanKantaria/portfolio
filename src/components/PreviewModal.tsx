@@ -27,58 +27,30 @@ export function PreviewModal({ product, onClose }: Props) {
       className="modal-overlay"
       role="dialog"
       aria-modal="true"
-      aria-label={`Live preview of ${product.name}`}
+      aria-label={`Preview of ${product.name}`}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
     >
-      <div className="browser">
-        <div className="browser-bar">
-          <span className="browser-dots" aria-hidden="true">
-            <i />
-            <i />
-            <i />
-          </span>
-          <span className="browser-url">
-            <span className="live-dot" aria-hidden="true" />
-            {product.domain}
-          </span>
-          <div className="browser-actions">
-            <a
-              className="browser-open"
-              href={product.url}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Open site ↗
+      <div className="preview">
+        <header className="preview-bar">
+          <span className="preview-url">{product.domain}</span>
+          <div className="preview-actions">
+            <a className="preview-open" href={product.url} target="_blank" rel="noreferrer">
+              Open site <span aria-hidden="true">↗</span>
             </a>
-            <button
-              ref={closeRef}
-              type="button"
-              className="browser-close"
-              onClick={onClose}
-              aria-label="Close preview"
-            >
-              ✕
+            <button ref={closeRef} type="button" className="modal-close" onClick={onClose}>
+              Close
             </button>
           </div>
-        </div>
+        </header>
 
         {product.embeddable ? (
-          <iframe
-            className="browser-frame"
-            src={product.url}
-            title={`Live preview of ${product.name}`}
-          />
+          <iframe className="preview-frame" src={product.url} title={`Preview of ${product.name}`} />
         ) : (
-          <div className="browser-blocked">
+          <div className="preview-blocked">
             <img src={product.thumb} alt={`Screenshot of ${product.name}`} />
-            <div className="browser-blocked-note">
-              <p>{product.embedNote}</p>
-              <a href={product.url} target="_blank" rel="noreferrer">
-                Open {product.domain} ↗
-              </a>
-            </div>
+            {product.embedNote && <p className="preview-note">{product.embedNote}</p>}
           </div>
         )}
       </div>

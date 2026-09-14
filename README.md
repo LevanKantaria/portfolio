@@ -54,10 +54,12 @@ docs `content/persona` and `content/site`) so text changes need no redeploy:
   product cards (add, remove, reorder, store badges), the case studies
   (Markdown bodies), and the chatbot's greeting, suggestions, and knowledge
   document.
-- **Appearance** tab switches the whole site between three designs —
-  `porcelain` (quiet editorial), `instrument` (dark cockpit) and `press`
-  (signage poster). Each is a `html[data-theme]` block in `src/themes.css`;
-  the last-seen theme is cached in localStorage so repeat visits don't flash.
+- **Appearance** tab switches the whole site between three designs:
+  `saperavi` (the default: deep Georgian wine, bilingual name, serif reading
+  type), `instrument` (dark cockpit) and `press` (signage poster). The default
+  lives in `src/index.css`; the other two are `html[data-theme]` blocks in
+  `src/theme-variants.css`. The last-seen theme is cached in localStorage so
+  repeat visits don't flash, and the retired `porcelain` id maps to `saperavi`.
 - Firestore docs: `content/site`, `content/products`, `content/caseStudies`,
   `content/persona`. Every field falls back to the baked-in defaults in
   `src/lib/content.ts`, `src/data/products.ts` and `src/data/caseStudies.ts`,

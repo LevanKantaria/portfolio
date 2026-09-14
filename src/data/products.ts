@@ -16,15 +16,15 @@ export interface Product {
   playStore?: string | null
 }
 
-/** Seed content and offline fallback — the live copy lives in Firestore. */
+/** Seed content and offline fallback. The live copy lives in Firestore. */
 export const DEFAULT_PRODUCTS: Product[] = [
   {
     id: 'megzuri',
     name: 'MEGZURI',
-    role: 'Founder · Full-stack',
-    period: '2026 — present',
+    role: 'Founder, full-stack',
+    period: '2026 – now',
     description:
-      'Mobile app helping Georgian drivers track average speed between section-camera zones. Trip guidance, live average-speed calculation, public leaderboard, and a daily data-ingestion pipeline for camera and traffic-fine data.',
+      "An iOS app that shows Georgian drivers their average speed between section cameras while they drive, so they know they're under the limit before a fine arrives. Camera and fine data update automatically every day.",
     stack: ['React Native', 'Firebase', 'Firestore', 'Node.js', 'Cron jobs'],
     url: 'https://megzuri.info',
     domain: 'megzuri.info',
@@ -36,10 +36,10 @@ export const DEFAULT_PRODUCTS: Product[] = [
   {
     id: 'makershub',
     name: 'MakersHub',
-    role: 'Full-stack',
-    period: '2025 — 2026',
+    role: 'Full-stack developer',
+    period: '2025 – 2026',
     description:
-      'Marketplace where local makers open digital storefronts for handmade products. Multi-role auth, seller onboarding, listing management, admin dashboards, and transactional email — Next.js for SEO pages, a React SPA for admin.',
+      'A marketplace where Georgian makers sell handmade goods, from ceramics and candles to 3D prints. I built seller onboarding, listings, moderation and the admin dashboard. Public pages use Next.js so they rank in search.',
     stack: ['Next.js', 'React', 'Node.js', 'Express', 'MongoDB', 'Firestore'],
     url: 'https://makershub.ge',
     domain: 'makershub.ge',
@@ -49,38 +49,38 @@ export const DEFAULT_PRODUCTS: Product[] = [
   {
     id: 'bogpay',
     name: 'BOG Pay',
-    role: 'Lead frontend · Bank of Georgia',
-    period: '2023 — 2026',
+    role: 'Frontend, Bank of Georgia',
+    period: '2023 – 2026',
     description:
-      'Public payments platform of Bank of Georgia. Config-driven dynamic forms powering 500+ uniquely structured services, built for reliability and UX clarity in a regulated environment.',
+      "Bank of Georgia's public payments site. I worked on the form framework behind it, which renders more than 500 differently structured payment services from configuration.",
     stack: ['React', 'TypeScript', 'Redux', 'GraphQL', 'Tailwind'],
     url: 'https://bogpay.ge',
     domain: 'bogpay.ge',
     thumb: '/thumbs/bogpay.png',
     embeddable: false,
-    embedNote: 'Banking platforms block embedding for security, so the preview opens on the site itself.',
+    embedNote: 'The bank blocks embedding, so this is a screenshot. The link opens the live site.',
   },
   {
     id: 'ibank',
     name: 'iBank',
-    role: 'Lead frontend · Bank of Georgia',
-    period: '2023 — 2026',
+    role: 'Frontend, Bank of Georgia',
+    period: '2023 – 2026',
     description:
-      'Online banking for business and retail customers. Secure Visa/MasterCard payment flows delivered by a dedicated frontend team working with UX, backend, and architecture.',
+      "Online banking for Bank of Georgia's retail and business customers. I guided the five-person frontend team working on Visa and Mastercard payment flows.",
     stack: ['React', 'TypeScript', 'LitElement', 'GraphQL', 'Kubernetes'],
     url: 'https://ibank.bog.ge',
     domain: 'ibank.bog.ge',
     thumb: '/thumbs/ibank.png',
     embeddable: false,
-    embedNote: 'Banking platforms block embedding for security, so the preview opens on the site itself.',
+    embedNote: 'The bank blocks embedding, so this is a screenshot. The link opens the live site.',
   },
   {
     id: 'carpool',
     name: 'Gamiyole',
-    role: 'Freelance · Full-stack',
+    role: 'Freelance, full-stack',
     period: '2021',
     description:
-      'Carpooling app for affordable intercity travel in Georgia — drivers publish routes, passengers search and join, with profiles and driver ratings. Built end to end as a freelance project.',
+      'A carpooling app for cheaper travel between Georgian cities. Drivers post routes, passengers search and book seats, and riders rate their drivers.',
     stack: ['React', 'Redux', 'Firebase'],
     url: 'https://react-http-7efc4.web.app',
     domain: 'react-http-7efc4.web.app',

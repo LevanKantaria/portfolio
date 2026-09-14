@@ -2,8 +2,8 @@
  * All editable site content. Stored in Firestore (project
  * levankantaria-portfolio) so /admin can change it without a redeploy.
  *
- * The public site reads it over plain REST — no Firebase SDK in the main
- * bundle — and every field falls back to the baked-in default below, so the
+ * The public site reads it over plain REST (no Firebase SDK in the main
+ * bundle), and every field falls back to the baked-in default below, so the
  * site renders instantly and never breaks if Firestore is unreachable.
  */
 
@@ -33,36 +33,42 @@ export interface TimelineEntry {
   note: string
 }
 
-export type Theme = 'porcelain' | 'instrument' | 'press'
+export type Theme = 'saperavi' | 'instrument' | 'press'
 
 export const THEMES: { id: Theme; name: string; blurb: string }[] = [
   {
-    id: 'porcelain',
-    name: 'Porcelain',
-    blurb: 'Quiet editorial. Soft grey paper, wine accent, calm cards.',
+    id: 'saperavi',
+    name: 'Saperavi',
+    blurb: 'Deep Georgian wine, a large bilingual name, serif reading type.',
   },
   {
     id: 'instrument',
     name: 'Instrument',
-    blurb: 'Dark cockpit. Telemetry panels, cyan and amber readouts, mono labels.',
+    blurb: 'Dark cockpit. Cyan readouts, monospace labels.',
   },
   {
     id: 'press',
     name: 'Press',
-    blurb: 'Signage poster. Huge type, ultramarine, hard-edged blocks.',
+    blurb: 'Signage poster. Ultramarine field, heavy capitals, hard shadows.',
   },
 ]
+
+/** Map stored or cached values (including the retired "porcelain") to a current theme. */
+export function normalizeTheme(value: unknown): Theme {
+  if (value === 'porcelain') return 'saperavi'
+  return THEMES.some((t) => t.id === value) ? (value as Theme) : 'saperavi'
+}
 
 export interface SiteContent {
   /* appearance */
   theme: Theme
   /* hero */
+  name: string
+  nameNative: string
   eyebrow: string
-  titleLead: string
-  titleAccent: string
   heroLede: string
   openToWork: boolean
-  ctaLabel: string
+  availabilityNote: string
   /* contact + links */
   email: string
   linkedin: string
@@ -75,99 +81,91 @@ export interface SiteContent {
   skills: SkillRow[]
   timeline: TimelineEntry[]
   /* chat */
+  askHint: string
   chatGreeting: string
   chatSuggestions: string[]
-  /* footer */
+  /* contact band + footer */
+  contactHeading: string
   footerLocation: string
   footerNote: string
 }
 
 export const DEFAULT_SITE_CONTENT: SiteContent = {
-  theme: 'porcelain',
-  eyebrow: 'Full-stack · React / TypeScript · Tbilisi, Georgia',
-  titleLead: 'Shipped, and',
-  titleAccent: 'still running',
+  theme: 'saperavi',
+  name: 'Levan Kantaria',
+  nameNative: 'ლევან ქანთარია',
+  eyebrow: 'Full-stack engineer in Tbilisi',
   heroLede:
-    "I'm a full-stack engineer with a frontend core. I've shipped payment " +
-    "platforms for one of Georgia's largest banks, launched my own apps for " +
-    'drivers and makers, and built AI into real products — including the ' +
-    'assistant on this page. Everything here is live: open any card and use ' +
-    'the real thing.',
+    "I'm a full-stack engineer, strongest on the frontend. I spent three years " +
+    'building payment products at Bank of Georgia, and now I build my own. ' +
+    'MEGZURI, a driving app for Georgian roads, is live on the App Store.',
   openToWork: true,
-  ctaLabel: 'See the products',
+  availabilityNote: 'Available for full-time and freelance work, remote or in Tbilisi.',
   email: 'l.kantaria1999@gmail.com',
   linkedin: 'https://www.linkedin.com/in/levan-kantaria-bb223120b/',
   cv: 'https://drive.google.com/file/d/19-35F4dmYZR8mYcoXGwL00XB_0QUZqqJ/view?usp=sharing',
-  productsNote: 'Real screenshots, real domains. Click a card for a live preview.',
-  caseStudiesNote: 'A deeper look at how I work through real problems.',
+  productsNote: 'Click a screenshot to open the site.',
+  caseStudiesNote: 'Two projects in more detail.',
   aboutParagraphs: [
-    'Full-stack engineer with a frontend core — 5+ years building production ' +
-      'fintech interfaces, payment flows, and product-focused web and mobile ' +
-      'apps. At Bank of Georgia I led a frontend team in the online payments ' +
-      'division until 2026; these days I take products from idea to launch on ' +
-      'my own — most recently MEGZURI, an average-speed tracking app for ' +
-      'Georgian drivers.',
-    'I care about clear UX, clean architecture, and measurable business impact ' +
-      '— and I work AI-assisted, using Claude Code and Cursor as part of a ' +
-      'structured development workflow.',
+    "I've been building for the web for more than five years, mostly on " +
+      'products that customers depend on every day. At Bank of Georgia I worked ' +
+      'in the online payments division, where I guided the frontend team and ' +
+      'helped turn hundreds of hand-built payment forms into one configurable ' +
+      'system.',
+    "Since 2025 I've been building my own products from idea to launch: the " +
+      'app, the backend, the admin tools and the landing page. I like working ' +
+      'close to the people who use what I make, and I use Claude Code and ' +
+      'Cursor every day.',
   ],
   skills: [
-    {
-      label: 'Frontend',
-      items: 'React · TypeScript · Next.js · React Native · Redux · Tailwind CSS',
-    },
-    {
-      label: 'Backend',
-      items: 'Node.js · Express · GraphQL · PostgreSQL · MongoDB · Firebase · AWS',
-    },
-    {
-      label: 'AI-assisted development',
-      items:
-        'Claude Code · Cursor · OpenAI · rapid prototyping · structured prompt workflows',
-    },
+    { label: 'Frontend', items: 'React, TypeScript, Next.js, React Native, Redux, Tailwind CSS' },
+    { label: 'Backend', items: 'Node.js, Express, GraphQL, PostgreSQL, MongoDB, Firebase, AWS' },
+    { label: 'AI and tooling', items: 'Claude API, prompt design, Claude Code, Cursor' },
   ],
   timeline: [
     {
-      period: '2023 — 2026',
-      role: 'Senior Web Developer / Analyst',
+      period: '2023 – 2026',
+      role: 'Senior web developer, analyst',
       place: 'Bank of Georgia',
-      note: 'Led frontend delivery for Visa/MasterCard payment platforms in the online payments division.',
+      note: 'Frontend for Visa and Mastercard payment products in the online payments division.',
     },
     {
-      period: '2025 — present',
-      role: 'Founder & Full-stack Developer',
-      place: 'MEGZURI · MakersHub',
-      note: 'Building and launching my own products end to end — mobile, web, backend, and data pipelines.',
+      period: '2025 – now',
+      role: 'Founder, full-stack developer',
+      place: 'MEGZURI and MakersHub',
+      note: 'My own products, from the first sketch to the App Store.',
     },
     {
       period: '2022',
-      role: 'React Developer',
+      role: 'React developer',
       place: 'Manufacture',
-      note: 'Manufacturing workflow and middleware platform connecting clients — manufactured.com.',
+      note: 'A workflow platform connecting manufacturers with their clients.',
     },
     {
-      period: '2021 — 2022',
-      role: 'Full-stack Developer',
+      period: '2021 – 2022',
+      role: 'Full-stack developer',
       place: 'ITechArt',
-      note: 'Luxury travel platform: authenticated user flows and full-stack features with React, TypeScript, GraphQL, and Node.js.',
+      note: 'Sign-in flows and full-stack features for a luxury travel platform.',
     },
     {
-      period: '2020 — 2021',
-      role: 'Freelancer',
+      period: '2020 – 2021',
+      role: 'Freelance developer',
       place: 'Independent clients',
-      note: 'Gamiyole carpool app and a Node.js trading bot on Discord, Binance, and TradingView APIs.',
+      note: 'Gamiyole, a carpooling app, and a trading bot connected to Binance and TradingView.',
     },
   ],
+  askHint: 'An assistant I built with the Claude API. It answers from my CV and project notes.',
   chatGreeting:
-    "Hi! I'm Levan's assistant. Ask me anything about his experience, " +
-    'products, or how to get in touch.',
+    "Ask me about Levan's projects, experience or availability. " +
+    'I answer from his CV and project notes.',
   chatSuggestions: [
-    'What did Levan build at Bank of Georgia?',
-    'Tell me about MEGZURI',
-    'Is he available for hire?',
+    'What did he work on at Bank of Georgia?',
+    'How does MEGZURI work?',
+    'Is he available for new work?',
   ],
+  contactHeading: 'Get in touch',
   footerLocation: 'Tbilisi, Georgia',
-  footerNote: 'Built with React, TypeScript, and Vite.',
+  footerNote: 'I designed and built this site.',
 }
 
 export interface AllContent {
@@ -222,7 +220,7 @@ async function fetchDoc(name: string): Promise<Record<string, unknown> | null> {
 
 /**
  * Fall back to the default when a value is missing or the wrong shape.
- * Deliberately empty values (a cleared field, an emptied list) are respected —
+ * Deliberately empty values (a cleared field, an emptied list) are respected:
  * they're an editor's choice, not a failure.
  */
 function pick<T>(stored: unknown, fallback: T): T {
@@ -232,33 +230,16 @@ function pick<T>(stored: unknown, fallback: T): T {
   return stored as T
 }
 
-function mergeSite(stored: Record<string, unknown> | null): SiteContent {
+/** Merge a stored site doc over the defaults, field by field. */
+export function mergeSite(stored: Record<string, unknown> | null): SiteContent {
   if (!stored) return DEFAULT_SITE_CONTENT
   const d = DEFAULT_SITE_CONTENT
-  const theme = THEMES.some((t) => t.id === stored.theme)
-    ? (stored.theme as Theme)
-    : d.theme
-  return {
-    theme,
-    eyebrow: pick(stored.eyebrow, d.eyebrow),
-    titleLead: pick(stored.titleLead, d.titleLead),
-    titleAccent: pick(stored.titleAccent, d.titleAccent),
-    heroLede: pick(stored.heroLede, d.heroLede),
-    openToWork: typeof stored.openToWork === 'boolean' ? stored.openToWork : d.openToWork,
-    ctaLabel: pick(stored.ctaLabel, d.ctaLabel),
-    email: pick(stored.email, d.email),
-    linkedin: pick(stored.linkedin, d.linkedin),
-    cv: pick(stored.cv, d.cv),
-    productsNote: pick(stored.productsNote, d.productsNote),
-    caseStudiesNote: pick(stored.caseStudiesNote, d.caseStudiesNote),
-    aboutParagraphs: pick(stored.aboutParagraphs, d.aboutParagraphs),
-    skills: pick(stored.skills, d.skills),
-    timeline: pick(stored.timeline, d.timeline),
-    chatGreeting: pick(stored.chatGreeting, d.chatGreeting),
-    chatSuggestions: pick(stored.chatSuggestions, d.chatSuggestions),
-    footerLocation: pick(stored.footerLocation, d.footerLocation),
-    footerNote: pick(stored.footerNote, d.footerNote),
+  const merged = { ...d } as Record<string, unknown>
+  for (const key of Object.keys(d) as (keyof SiteContent)[]) {
+    merged[key] = pick(stored[key], d[key])
   }
+  merged.theme = normalizeTheme(stored.theme)
+  return merged as unknown as SiteContent
 }
 
 export async function fetchContent(): Promise<AllContent> {
@@ -284,7 +265,7 @@ export function applyTheme(theme: Theme) {
   try {
     localStorage.setItem(THEME_KEY, theme)
   } catch {
-    // private mode — the theme still applies for this page view
+    // private mode: the theme still applies for this page view
   }
 }
 
@@ -292,9 +273,7 @@ export function applyTheme(theme: Theme) {
 export function applyCachedTheme() {
   try {
     const cached = localStorage.getItem(THEME_KEY)
-    if (cached && THEMES.some((t) => t.id === cached)) {
-      document.documentElement.dataset.theme = cached
-    }
+    if (cached) document.documentElement.dataset.theme = normalizeTheme(cached)
   } catch {
     // ignore
   }

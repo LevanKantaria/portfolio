@@ -21,10 +21,10 @@ function CaseStudyCard({ study }: { study: CaseStudy }) {
   return (
     <>
       <button type="button" className="case-card" onClick={() => setOpen(true)}>
-        <p className="case-eyebrow">{study.eyebrow}</p>
-        <h3>{study.title}</h3>
-        <p className="case-teaser">{study.teaser}</p>
-        <span className="case-more">Read case study →</span>
+        <span className="case-eyebrow">{study.eyebrow}</span>
+        <span className="case-title">{study.title}</span>
+        <span className="case-teaser">{study.teaser}</span>
+        <span className="case-more">Read the case study</span>
       </button>
 
       {open && (
@@ -32,26 +32,21 @@ function CaseStudyCard({ study }: { study: CaseStudy }) {
           className="modal-overlay"
           role="dialog"
           aria-modal="true"
-          aria-label={study.title}
+          aria-labelledby={`case-${study.id}`}
           onClick={(e) => {
             if (e.target === e.currentTarget) setOpen(false)
           }}
         >
           <article className="case-modal">
-            <header className="case-modal-head">
+            <header className="modal-head">
               <p className="case-eyebrow">{study.eyebrow}</p>
-              <button
-                type="button"
-                className="case-modal-close"
-                onClick={() => setOpen(false)}
-                aria-label="Close case study"
-              >
-                ✕
+              <button type="button" className="modal-close" onClick={() => setOpen(false)}>
+                Close
               </button>
             </header>
             <div className="case-modal-body">
-              <h3>{study.title}</h3>
-              <div className="case-prose">
+              <h2 id={`case-${study.id}`}>{study.title}</h2>
+              <div className="prose">
                 <Markdown text={study.bodyMd} />
               </div>
             </div>
@@ -62,26 +57,21 @@ function CaseStudyCard({ study }: { study: CaseStudy }) {
   )
 }
 
-export function CaseStudies({
-  studies,
-  note,
-}: {
-  studies: CaseStudy[]
-  note: string
-}) {
+export function CaseStudies({ studies, note }: { studies: CaseStudy[]; note: string }) {
   if (studies.length === 0) return null
 
   return (
-    <section id="case-studies" className="container case-studies">
-      <div className="section-head">
-        <h2>Case studies</h2>
-        <p>{note}</p>
-      </div>
-
-      <div className="case-grid">
-        {studies.map((s) => (
-          <CaseStudyCard key={s.id || s.title} study={s} />
-        ))}
+    <section id="case-studies" className="section cases">
+      <div className="wrap">
+        <header className="section-head">
+          <h2>Case studies</h2>
+          {note && <p>{note}</p>}
+        </header>
+        <div className="case-grid">
+          {studies.map((s) => (
+            <CaseStudyCard key={s.id || s.title} study={s} />
+          ))}
+        </div>
       </div>
     </section>
   )

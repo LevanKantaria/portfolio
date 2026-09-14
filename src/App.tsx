@@ -1,8 +1,8 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
 import type { Product } from './data/products'
-import { ProductCard } from './components/ProductCard'
+import { WorkItem } from './components/WorkItem'
 import { PreviewModal } from './components/PreviewModal'
-import { ChatProvider, ChatWidget, HeroChat } from './components/Chat'
+import { AskBar, ChatProvider, useChat } from './components/Chat'
 import { CaseStudies } from './components/CaseStudies'
 import {
   fetchContent,
@@ -22,10 +22,25 @@ const isAdminRoute =
 // Paint the theme this visitor saw last, before React renders anything.
 if (!isAdminRoute) applyCachedTheme()
 
+function NavAsk() {
+  const { open } = useChat()
+  return (
+    <button type="button" className="nav-ask" onClick={() => open()}>
+      Ask
+    </button>
+  )
+}
+
+/** "https://www.linkedin.com/in/levan-kantaria-bb223120b/" -> "in/levan-kantaria-bb223120b" */
+function linkedinLabel(url: string) {
+  const match = /linkedin\.com\/(in\/[^/?#]+)/i.exec(url)
+  return match ? match[1] : 'Profile'
+}
+
 export default function App() {
-  const [open, setOpen] = useState<Product | null>(null)
-  const [{ site, products, caseStudies }, setContent] =
-    useState<AllContent>(DEFAULT_CONTENT)
+  const [preview, setPreview] = useState<Product | null>(null)
+  const [{ site, products, caseStudies }, setContent] = useState<AllContent>(DEFAULT_CONTENT)
+  const closePreview = useCallback(() => setPreview(null), [])
 
   useEffect(() => {
     if (isAdminRoute) return
@@ -43,137 +58,215 @@ export default function App() {
     )
   }
 
-  return (
-    <ChatProvider greeting={site.chatGreeting} suggestions={site.chatSuggestions}>
-      <header className="topbar">
-        <div className="container topbar-inner">
-          <a className="wordmark" href="#top">
-            Levan Kantaria
-          </a>
-          <nav aria-label="Sections">
-            <a href="#products">Products</a>
-            {caseStudies.length > 0 && <a href="#case-studies">Case studies</a>}
-            <a href="#about">About</a>
-            <a href={`mailto:${site.email}`}>Contact</a>
-          </nav>
-        </div>
-      </header>
+  const year = new Date().getFullYear()
 
-      <main id="top">
-        <section className="hero container">
-          <div className="hero-grid">
-            <div className="hero-copy">
-              <p className="eyebrow">{site.eyebrow}</p>
-              <h1>
-                {site.titleLead} <em>{site.titleAccent}</em>.
+  return (
+    <ChatProvider
+      greeting={site.chatGreeting}
+      suggestions={site.chatSuggestions}
+      hint={site.askHint}
+    >
+      <div className="hero-band">
+        <header className="site-header">
+          <div className="wrap header-inner">
+            <a className="wordmark" href="#top">
+              {site.name}
+            </a>
+            <nav aria-label="Sections">
+              <a href="#work">Work</a>
+              {caseStudies.length > 0 && (
+                <a className="nav-optional" href="#case-studies">
+                  Case studies
+                </a>
+              )}
+              <a className="nav-optional" href="#about">
+                About
+              </a>
+              <NavAsk />
+              {site.cv && (
+                <a className="nav-cv" href={site.cv} target="_blank" rel="noreferrer">
+                  CV
+                </a>
+              )}
+            </nav>
+          </div>
+        </header>
+
+        <section className="hero" id="top">
+          <div className="wrap hero-grid">
+            <div className="hero-main">
+              {site.eyebrow && <p className="hero-eyebrow">{site.eyebrow}</p>}
+              <h1 className="hero-name">
+                {site.name.split(' ').map((word, i) => (
+                  <span key={i} className="hero-name-line">
+                    {word}
+                  </span>
+                ))}
               </h1>
+              {site.nameNative && (
+                <p className="hero-native" lang="ka">
+                  {site.nameNative}
+                </p>
+              )}
+            </div>
+
+            <img className="hero-photo" src={mePhoto} alt={site.name} />
+
+            <div className="hero-copy">
               <p className="hero-lede">{site.heroLede}</p>
-              <div className="hero-actions">
-                <a className="btn btn-primary" href="#products">
-                  {site.ctaLabel}
-                </a>
-                <a className="btn" href={`mailto:${site.email}`}>
-                  {site.email}
-                </a>
-              </div>
+              <AskBar />
             </div>
-            <div className="hero-side">
-              <div className="hero-profile">
-                <div className="hero-avatar-wrap">
-                  <img className="hero-avatar" src={mePhoto} alt="Levan Kantaria" />
-                  {site.openToWork && (
-                    <span className="open-badge">
-                      <span className="live-dot" aria-hidden="true" />
-                      Open to work
-                    </span>
-                  )}
+
+            <dl className="hero-facts">
+              {site.openToWork && site.availabilityNote && (
+                <div>
+                  <dt>Status</dt>
+                  <dd className="fact-status">{site.availabilityNote}</dd>
                 </div>
-                <div className="profile-links">
-                  {site.linkedin && (
-                    <a
-                      className="profile-icon"
-                      href={site.linkedin}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label="Levan on LinkedIn"
-                      title="LinkedIn"
-                    >
-                      <svg viewBox="0 0 448 512" width="16" height="16" fill="currentColor" aria-hidden="true">
-                        <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z" />
-                      </svg>
-                    </a>
-                  )}
-                  {site.cv && (
-                    <a className="btn-cv" href={site.cv} target="_blank" rel="noreferrer">
-                      Download CV ↗
-                    </a>
-                  )}
-                </div>
+              )}
+              <div>
+                <dt>Email</dt>
+                <dd>
+                  <a href={`mailto:${site.email}`}>{site.email}</a>
+                </dd>
               </div>
-              <HeroChat />
-            </div>
+              {site.linkedin && (
+                <div>
+                  <dt>LinkedIn</dt>
+                  <dd>
+                    <a href={site.linkedin} target="_blank" rel="noreferrer">
+                      {linkedinLabel(site.linkedin)}
+                    </a>
+                  </dd>
+                </div>
+              )}
+              {site.cv && (
+                <div>
+                  <dt>CV</dt>
+                  <dd>
+                    <a href={site.cv} target="_blank" rel="noreferrer">
+                      Download PDF
+                    </a>
+                  </dd>
+                </div>
+              )}
+            </dl>
           </div>
         </section>
+      </div>
 
-        <section id="products" className="container products">
-          <div className="section-head">
-            <h2>Products</h2>
-            <p>{site.productsNote}</p>
-          </div>
-          <div className="product-grid">
-            {products.map((p) => (
-              <ProductCard key={p.id} product={p} onOpen={setOpen} />
-            ))}
+      <main>
+        <section id="work" className="section work-section">
+          <div className="wrap">
+            <header className="section-head">
+              <h2>Selected work</h2>
+              {site.productsNote && <p>{site.productsNote}</p>}
+            </header>
+            <div className="work-list">
+              {products.map((p) => (
+                <WorkItem key={p.id} product={p} onOpen={setPreview} />
+              ))}
+            </div>
           </div>
         </section>
 
         <CaseStudies studies={caseStudies} note={site.caseStudiesNote} />
 
-        <section id="about" className="container about">
-          <div className="section-head">
-            <h2>About</h2>
-          </div>
-          <div className="about-cols">
-            <div className="about-text">
-              {site.aboutParagraphs.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
-              <dl className="skills">
-                {site.skills.map((s) => (
-                  <div key={s.label} className="skills-row">
-                    <dt>{s.label}</dt>
-                    <dd>{s.items}</dd>
-                  </div>
+        <section id="about" className="section about">
+          <div className="wrap">
+            <header className="section-head">
+              <h2>About</h2>
+            </header>
+
+            <div className="about-row">
+              <h3 className="about-label">Background</h3>
+              <div className="prose about-prose">
+                {site.aboutParagraphs.map((p, i) => (
+                  <p key={i}>{p}</p>
                 ))}
-              </dl>
+              </div>
             </div>
-            <ol className="timeline">
-              {site.timeline.map((e, i) => (
-                <li key={`${e.role}-${i}`}>
-                  <span className="timeline-period">{e.period}</span>
-                  <strong>{e.role}</strong>
-                  <span className="timeline-place">{e.place}</span>
-                  <p>{e.note}</p>
-                </li>
-              ))}
-            </ol>
+
+            {site.timeline.length > 0 && (
+              <div className="about-row">
+                <h3 className="about-label">Experience</h3>
+                <ol className="xp">
+                  {site.timeline.map((e, i) => (
+                    <li key={`${e.role}-${i}`}>
+                      <span className="xp-period">{e.period}</span>
+                      <div>
+                        <p className="xp-role">
+                          {e.role}
+                          {e.place && <span className="xp-place">{e.place}</span>}
+                        </p>
+                        {e.note && <p className="xp-note">{e.note}</p>}
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+
+            {site.skills.length > 0 && (
+              <div className="about-row">
+                <h3 className="about-label">Skills</h3>
+                <dl className="skills">
+                  {site.skills.map((s, i) => (
+                    <div key={`${s.label}-${i}`}>
+                      <dt>{s.label}</dt>
+                      <dd>{s.items}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            )}
           </div>
         </section>
       </main>
 
-      <footer className="footer">
-        <div className="container footer-inner">
-          <p>
-            Levan Kantaria · {site.footerLocation} ·{' '}
-            <a href={`mailto:${site.email}`}>{site.email}</a>
-          </p>
-          <p className="footer-note">{site.footerNote}</p>
+      <footer id="contact" className="contact">
+        <div className="wrap">
+          <h2 className="contact-heading">{site.contactHeading}</h2>
+          <a className="contact-email" href={`mailto:${site.email}`}>
+            {/* allow a line break only after the @ on narrow screens */}
+            {site.email.includes('@') ? (
+              <>
+                {site.email.split('@')[0]}@<wbr />
+                {site.email.split('@').slice(1).join('@')}
+              </>
+            ) : (
+              site.email
+            )}
+          </a>
+          {site.openToWork && site.availabilityNote && (
+            <p className="contact-note">{site.availabilityNote}</p>
+          )}
+          <ul className="contact-links">
+            {site.linkedin && (
+              <li>
+                <a href={site.linkedin} target="_blank" rel="noreferrer">
+                  LinkedIn <span aria-hidden="true">↗</span>
+                </a>
+              </li>
+            )}
+            {site.cv && (
+              <li>
+                <a href={site.cv} target="_blank" rel="noreferrer">
+                  CV <span aria-hidden="true">↗</span>
+                </a>
+              </li>
+            )}
+          </ul>
+          <div className="colophon">
+            <span>
+              © {year} {site.name}, {site.footerLocation}
+            </span>
+            {site.footerNote && <span>{site.footerNote}</span>}
+          </div>
         </div>
       </footer>
 
-      <ChatWidget />
-
-      {open && <PreviewModal product={open} onClose={() => setOpen(null)} />}
+      {preview && <PreviewModal product={preview} onClose={closePreview} />}
     </ChatProvider>
   )
 }

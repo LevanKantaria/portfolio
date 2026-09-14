@@ -12,6 +12,7 @@ import {
   FIREBASE_CONFIG,
   DEFAULT_SITE_CONTENT,
   THEMES,
+  mergeSite,
   type SiteContent,
   type Theme,
   type Product,
@@ -20,6 +21,7 @@ import {
 import { DEFAULT_PRODUCTS } from '../data/products'
 import { DEFAULT_CASE_STUDIES } from '../data/caseStudies'
 import { ListEditor, StringList, TagsInput, TextArea, TextInput, Toggle } from './fields'
+import './admin.css'
 
 const app = initializeApp(FIREBASE_CONFIG)
 const auth = getAuth(app)
@@ -112,7 +114,7 @@ function Editor({ user }: { user: User }) {
       getDoc(doc(db, 'content', 'persona')),
     ])
       .then(([s, p, c, persona]) => {
-        if (s.exists()) setSite({ ...DEFAULT_SITE_CONTENT, ...(s.data() as SiteContent) })
+        if (s.exists()) setSite(mergeSite(s.data() ?? null))
         const items = p.data()?.items as Product[] | undefined
         if (items?.length) setProducts(items)
         const cs = c.data()?.items as CaseStudy[] | undefined
@@ -209,35 +211,36 @@ function Editor({ user }: { user: User }) {
 
       {tab === 'Hero & profile' && (
         <section className="admin-section">
-          <TextInput label="Eyebrow" value={site.eyebrow} onChange={setSiteField('eyebrow')} />
           <div className="admin-grid-2">
+            <TextInput label="Name" value={site.name} onChange={setSiteField('name')} />
             <TextInput
-              label="Headline — first part"
-              value={site.titleLead}
-              onChange={setSiteField('titleLead')}
-            />
-            <TextInput
-              label="Headline — accent"
-              hint="shown in red"
-              value={site.titleAccent}
-              onChange={setSiteField('titleAccent')}
+              label="Name in Georgian script"
+              hint="leave blank to hide"
+              value={site.nameNative}
+              onChange={setSiteField('nameNative')}
             />
           </div>
+          <TextInput
+            label="Role line"
+            hint="shown above the name"
+            value={site.eyebrow}
+            onChange={setSiteField('eyebrow')}
+          />
           <TextArea
             label="Intro paragraph"
-            rows={5}
+            rows={4}
             value={site.heroLede}
             onChange={setSiteField('heroLede')}
           />
-          <TextInput
-            label="Primary button label"
-            value={site.ctaLabel}
-            onChange={setSiteField('ctaLabel')}
-          />
           <Toggle
-            label='Show "Open to work" badge'
+            label="Show availability"
             checked={site.openToWork}
             onChange={setSiteField('openToWork')}
+          />
+          <TextInput
+            label="Availability note"
+            value={site.availabilityNote}
+            onChange={setSiteField('availabilityNote')}
           />
           <div className="admin-grid-2">
             <TextInput label="Email" value={site.email} onChange={setSiteField('email')} />
@@ -245,7 +248,7 @@ function Editor({ user }: { user: User }) {
           </div>
           <TextInput
             label="CV link"
-            hint="leave blank to hide the button"
+            hint="leave blank to hide"
             value={site.cv}
             onChange={setSiteField('cv')}
           />
@@ -274,7 +277,7 @@ function Editor({ user }: { user: User }) {
                 <TextInput label="Label" value={row.label} onChange={(v) => update({ label: v })} />
                 <TextInput
                   label="Items"
-                  hint="separate with ·"
+                  hint="comma separated"
                   value={row.items}
                   onChange={(v) => update({ items: v })}
                 />
@@ -323,6 +326,12 @@ function Editor({ user }: { user: User }) {
               onChange={setSiteField('caseStudiesNote')}
             />
           </div>
+          <TextInput
+            label="Contact heading"
+            hint="large line above your email at the bottom of the page"
+            value={site.contactHeading}
+            onChange={setSiteField('contactHeading')}
+          />
           <div className="admin-grid-2">
             <TextInput
               label="Footer location"
@@ -482,6 +491,12 @@ function Editor({ user }: { user: User }) {
 
       {tab === 'Chatbot' && (
         <section className="admin-section">
+          <TextArea
+            label="Hint under the ask bar"
+            rows={2}
+            value={site.askHint}
+            onChange={setSiteField('askHint')}
+          />
           <TextArea
             label="Greeting"
             hint="first message in the chat"

@@ -7,104 +7,86 @@ export interface CaseStudy {
   bodyMd: string
 }
 
-/** Seed content and offline fallback — the live copy lives in Firestore. */
+/** Seed content and offline fallback. The live copy lives in Firestore. */
 export const DEFAULT_CASE_STUDIES: CaseStudy[] = [
   {
     id: 'megzuri',
-    eyebrow: 'MEGZURI · Founder · React Native + Firebase',
-    title: 'Building a real-time average-speed assistant for Georgian drivers',
+    eyebrow: 'MEGZURI, 2026',
+    title: 'An average-speed assistant for Georgian drivers',
     teaser:
-      'How I designed, built, and launched a mobile app that shows drivers their live average speed inside section-camera zones — end to end, as a solo founder.',
-    bodyMd: `MEGZURI is a mobile app I built to help Georgian drivers track their average speed between section-camera zones and avoid accidental traffic fines. In Georgia, many roads use average-speed cameras — drivers often slow down near the cameras but still receive fines, because the system calculates their average speed across the whole section, not just at the camera.
+      'Designing and launching an app that shows drivers their live average speed between section cameras.',
+    bodyMd: `Many Georgian roads have section cameras. They measure your average speed between two points, so slowing down at the camera doesn't help if you drove too fast in between. Drivers get fined without understanding why.
 
-I built MEGZURI as a full product: mobile app, backend logic, admin tooling, data management, landing page, and launch strategy.
+MEGZURI shows drivers their average speed for the section they're in, live, while they drive. I designed, built and launched it on my own.
 
 #### The problem
 
-Average-speed zones are confusing. The issue is usually not that drivers want to drive fast — it's lack of visibility. A driver can enter a zone, drive normally, slow down near the end, and still get fined because their average was too high:
+Most drivers fined on these roads aren't speeding on purpose. They can't see the numbers that matter:
 
-- Drivers don't always know where section-camera zones start and end.
-- Calculating average speed manually while driving is hard.
-- Speed limits and camera sections are not easy to remember.
-- Sudden braking near cameras makes traffic less smooth and less safe.
-- No simple Georgian-focused mobile tool existed for this problem.
+- Where a camera section starts and ends
+- Their average speed so far
+- How much distance is left, and what speed keeps them under the limit
 
-#### My role
+The usual response is braking hard at the last camera, which makes traffic worse. When I started, there was no Georgian app built around this problem.
 
-I designed, built, and launched MEGZURI myself: product idea and feature planning, mobile app design and development, real-time trip logic, average-speed and remaining-distance calculation, user profiles, trip history, a public leaderboard, an admin panel, camera and fine-data management, the landing page, and early marketing experiments. This was not just a coding project — I had to think like a product owner, designer, engineer, and marketer at the same time.
+#### What I built
 
-#### The solution
+The app tracks the active trip, calculates average speed across the current section and shows the distance left. Around that core are user profiles, trip history, a public leaderboard and an admin panel for camera data.
 
-MEGZURI gives drivers a live view of their average speed while inside a section-camera zone. Instead of only showing current speed, it focuses on average speed — because that's what matters — and answers the questions drivers actually care about: Am I currently safe? What's my average in this zone? How much distance is left? Do I need to slow down, or can I keep this pace?
+Camera locations and fine data change, so a scheduled Node.js job scrapes and updates them every day. The app runs on React Native with Firebase and Firestore.
 
-#### Technical approach
+#### Design decisions
 
-Built with React Native, Firebase, Firestore, and Node.js. The app handles the real-time experience — active trip state, speed calculations, zone guidance — while Firestore stores profiles, trip history, leaderboard, and camera-zone data. To keep data fresh, I built an automated ingestion system with scheduled jobs and scraping logic that updates camera and fine-related data daily, plus admin tooling to manage it. The key challenge: making the app feel simple while the logic underneath was complex. The user shouldn't need to understand formulas or section boundaries — just clear guidance at the right moment.
+A driving app has to be readable at a glance. The main screen shows three things: your average speed, the distance left, and whether you're currently safe. Everything else stays out of the way. The look borrows from car dashboards, with a dark background, large numbers and strong contrast.
 
-#### Product and UX decisions
+Trust mattered as much as clarity. People use MEGZURI to avoid fines, so a wrong number costs them money. The calculations and the camera data had to be reliable before anything else.
 
-The most important decision was making the app feel calm and clear while driving. Drivers shouldn't be overloaded — the interface shows the essentials fast: average speed, remaining distance, and whether you're currently safe. The design direction was inspired by clean automotive interfaces: dark UI, large numbers, strong contrast, minimal noise. Not a flashy app — something drivers understand in seconds.
+#### Where it is now
 
-#### Challenges
-
-Translating a real-world driving problem into simple product logic; earning trust (an app that deals with fines has to feel reliable in its data, calculations, and UI); and building everything end to end as a solo founder — app, backend, admin panel, website, data updates, and launch.
-
-#### Impact
-
-MEGZURI turned a common Georgian driving frustration into a focused mobile product. It's live on iOS (Google Play planned), tested with real users and early marketing campaigns — validating that drivers understand the problem and want a dedicated solution. For me it matters because it shows I can build beyond isolated features: take a real problem, design the solution, build the full system, launch it, and improve it from real user behavior.
+MEGZURI is live on the App Store, with an Android version planned. More than 25 people use it regularly, and I'm working on marketing to reach more drivers.
 
 #### What I learned
 
-Owning the full outcome feels completely different from delivering assigned features. I had to think about the problem, the user, the UX, the data model, the backend, the app-store launch, marketing, trust, and long-term direction. It also reinforced my main strength as an engineer: taking a messy real-world problem and turning it into a simple, usable interface.`,
+At a company you usually deliver the features you're given. Here I owned all of it: the idea, the interface, the data model, the backend, the App Store listing and the marketing. It changed how I judge features. Each one has to earn its place on a small screen that someone glances at while driving.`,
   },
   {
     id: 'bogpay',
-    eyebrow: 'Bank of Georgia · BOG Pay · React + TypeScript',
-    title: 'Turning BOG Pay service forms into a reusable framework',
+    eyebrow: 'Bank of Georgia, 2023 – 2026',
+    title: 'One form framework for 500 payment services',
     teaser:
-      'How we replaced hand-built payment forms with a JSON-driven framework that scaled to 500+ uniquely structured services in a production banking environment.',
-    bodyMd: `At Bank of Georgia, I worked in the online payments division on products used by both business and retail customers. One of the biggest frontend challenges was the structure of BOG Pay service forms: the platform supported hundreds of different services, and each could have its own fields, validation rules, UI behavior, and edge cases. Over time, building and maintaining these forms became repetitive, slow, and difficult to scale.
+      'Replacing hand-built payment forms on BOG Pay with a framework that renders every service from configuration.',
+    bodyMd: `BOG Pay is Bank of Georgia's public payments site. Customers use it to pay for hundreds of services, such as utility bills and mobile top-ups, and each service needs its own form with its own fields, validation rules and edge cases.
 
-To solve this, I helped transform the form-building process from manual one-by-one implementation into a reusable, configuration-driven framework based on shared components and JSON-based service definitions.
+Most of these forms used to be built one at a time. In the online payments team, I helped replace that with a single framework that renders any service from a JSON definition.
 
 #### The problem
 
-The original approach made every new or updated service feel like a custom frontend task. Even when services looked similar, small differences in fields, validation, dependencies, or business rules often required custom implementation work:
+Every new or changed service was a frontend task, even when it looked almost identical to one we had already built. Small differences in fields, validation or business rules meant custom code. Over time that led to:
 
-- Developers repeated similar UI and validation logic across many services.
-- Adding or changing services required more frontend effort than it should have.
-- The codebase became harder to maintain as the number of services grew.
-- Small inconsistencies could appear between similar forms.
-- Product and business changes were slower because each form needed developer attention.
+- The same UI and validation logic repeated across many services
+- More frontend work than a service change should need
+- A codebase that got harder to maintain as services were added
+- Small inconsistencies between forms that should behave the same
+- Product changes waiting on developer time
 
-For a payments platform, this mattered a lot. These forms were not simple UI screens — they were part of real payment flows where clarity, reliability, and correctness were critical.
+In a payment flow those inconsistencies matter. A confusing form can mean a failed or wrong payment.
 
 #### My role
 
-I worked as a frontend developer in the online payments team and helped lead the frontend implementation of this change: understanding the repeated patterns across many different payment forms, breaking complex form behavior into reusable components, designing a cleaner structure for rendering forms dynamically, and working with backend/BFF, product, UX/UI, QA, and architecture stakeholders — while keeping the system flexible enough for unusual service requirements.
+I helped lead the frontend side of the change. I looked for the patterns shared across hundreds of forms, broke their behaviour into reusable components and designed how forms would render from configuration. I worked with the backend and BFF, product, design, QA and architecture teams, and made sure unusual services still fit.
 
-#### The solution
+#### How it works
 
-We moved toward a reusable, JSON/config-driven form system. Instead of treating every service form as a separate custom implementation, we described form structure and behavior through configuration, and the frontend rendered the correct UI from that structure. The framework included reusable building blocks for common needs:
+We separated *what a form is* from *how it's rendered*. A JSON definition describes each service: its fields, labels, validation, conditional fields and metadata. The React frontend reads that definition and builds the form from shared components for inputs, selects, validation, errors, layout and the payment submit flow.
 
-- Text inputs, selects, and dynamic field rendering
-- Field validation and conditional fields
-- Service-specific labels and metadata
-- Consistent layout, spacing, and shared error handling
-- Reusable submit and payment-flow behavior
-
-Adding or updating a service became much more about defining the right configuration instead of writing a new custom screen from scratch.
-
-#### Technical approach
-
-The core idea was to separate *what the form is* from *how the form is rendered*. The JSON/config layer described the structure of each service form; the React frontend handled rendering, validation, state management, and user experience through shared components. Service definitions lived in a predictable structure, common logic was centralized, and edge cases could still be supported when a service needed special behavior. All of this ran inside a production banking environment, so the solution also had to be stable, maintainable, and safe for real users.
+Adding or changing a service became mostly a matter of writing the right configuration. When a service needed something unusual, the framework made room for it without a one-off screen.
 
 #### Impact
 
-The change reduced repeated frontend work and made the platform easier to scale — the team could support 500+ differently structured services with a cleaner, more maintainable approach, better consistency across payment forms, and faster future changes. For me, this project showed how frontend engineering directly improves product delivery speed: the value wasn't just UI components, it was turning a painful recurring workflow into a framework.
+The team could support more than 500 differently structured services with far less repeated code. Forms behaved consistently, and new services took much less frontend work.
 
 #### What I learned
 
-Complex products become easier to scale when you identify the repeated patterns and build the right abstraction. The hard part is not making something reusable — it's making it reusable without making it rigid. Balancing structure against flexibility for unusual payment services was the most interesting part of the work.`,
+Complex products get easier to scale once you find the repeated patterns and build the right abstraction. The hard part is keeping that abstraction flexible. The framework had to cover the common cases and still handle the odd payment service, and finding that balance was the most interesting part of the work.`,
   },
 ]
