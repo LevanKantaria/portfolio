@@ -71,6 +71,7 @@ export interface SiteContent {
   availabilityNote: string
   /* contact + links */
   email: string
+  phone: string
   linkedin: string
   cv: string
   /* section intros */
@@ -96,44 +97,54 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
   nameNative: 'ლევან ქანთარია',
   eyebrow: 'Full-stack engineer in Tbilisi',
   heroLede:
-    "I'm a full-stack engineer, strongest on the frontend. I spent three years " +
-    'building payment products at Bank of Georgia, and now I build my own. ' +
-    'MEGZURI, a driving app for Georgian roads, is live on the App Store.',
+    "I'm a full-stack engineer, strongest on the frontend. At Bank of Georgia I " +
+    'worked on the bank-wide design system and built the form engine behind more ' +
+    'than 500 payment services. Now I run my own products, including MEGZURI, a ' +
+    'driving app used by more than 1,000 people.',
   openToWork: true,
   availabilityNote: 'Available for full-time and freelance work, remote or in Tbilisi.',
   email: 'l.kantaria1999@gmail.com',
-  linkedin: 'https://www.linkedin.com/in/levan-kantaria-bb223120b/',
+  phone: '+995 592 282 824',
+  linkedin: 'https://www.linkedin.com/in/levan-kantaria/',
   cv: 'https://drive.google.com/file/d/19-35F4dmYZR8mYcoXGwL00XB_0QUZqqJ/view?usp=sharing',
   productsNote: 'Click a screenshot to open the site.',
   caseStudiesNote: 'Two projects in more detail.',
   aboutParagraphs: [
-    "I've been building for the web for more than five years, mostly on " +
-      'products that customers depend on every day. At Bank of Georgia I worked ' +
-      'in the online payments division, where I guided the frontend team and ' +
-      'helped turn hundreds of hand-built payment forms into one configurable ' +
-      'system.',
-    "Since 2025 I've been building my own products from idea to launch: the " +
-      'app, the backend, the admin tools and the landing page. I like working ' +
-      'close to the people who use what I make, and I use Claude Code and ' +
-      'Cursor every day.',
+    "I've spent more than five years building web products that people rely on " +
+      'every day. At Bank of Georgia I worked in the online payments division, on ' +
+      'public banking platforms with a regulated release process and a high bar ' +
+      'for correctness. I built shared components for the bank-wide LitElement ' +
+      'design system, wrapped them as typed React components so newer apps could ' +
+      'use the same library, and designed a form engine that renders more than 500 ' +
+      'differently structured services from configuration.',
+    "Since mid-2025 I've been building my own products. MEGZURI helps Georgian " +
+      'drivers stay under the limit between section cameras, and MakersHub gives ' +
+      'local makers a place to sell online. On both I own the whole stack, from ' +
+      'the React and React Native apps to the Node.js services behind them, and I ' +
+      'use Claude Code and Cursor every day.',
   ],
   skills: [
-    { label: 'Frontend', items: 'React, TypeScript, Next.js, React Native, Redux, Tailwind CSS' },
-    { label: 'Backend', items: 'Node.js, Express, GraphQL, PostgreSQL, MongoDB, Firebase, AWS' },
-    { label: 'AI and tooling', items: 'Claude API, prompt design, Claude Code, Cursor' },
+    { label: 'Frontend', items: 'TypeScript, React, Next.js, React Native, Redux, Zustand, Tailwind CSS' },
+    {
+      label: 'Design systems',
+      items: 'LitElement, Web Components, shared component libraries, component API design, Lit and React interop',
+    },
+    { label: 'Backend', items: 'Node.js, Express, GraphQL, REST, PostgreSQL, MongoDB, Firebase' },
+    { label: 'Infrastructure', items: 'AWS, Docker, Kubernetes, CI/CD with Jenkins and GitHub Actions' },
+    { label: 'Practice', items: 'Automated testing, code review, Claude API, Claude Code, Cursor' },
   ],
   timeline: [
     {
-      period: '2023 – 2026',
-      role: 'Senior web developer, analyst',
-      place: 'Bank of Georgia',
-      note: 'Frontend for Visa and Mastercard payment products in the online payments division.',
-    },
-    {
-      period: '2025 – now',
+      period: 'Jun 2025 – now',
       role: 'Founder, full-stack developer',
       place: 'MEGZURI and MakersHub',
-      note: 'My own products, from the first sketch to the App Store.',
+      note: 'Building and running two products of my own: the apps, the APIs, the admin tools and the releases.',
+    },
+    {
+      period: 'Feb 2023 – Apr 2026',
+      role: 'Senior web developer, analyst',
+      place: 'Bank of Georgia',
+      note: 'Shared components for the bank-wide LitElement design system, a typed React bridge for it, and a form engine behind more than 500 payment services.',
     },
     {
       period: '2022',
@@ -142,16 +153,16 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
       note: 'A workflow platform connecting manufacturers with their clients.',
     },
     {
-      period: '2021 – 2022',
-      role: 'Full-stack developer',
+      period: 'Feb 2022 – Jan 2023',
+      role: 'Frontend developer',
       place: 'ITechArt',
-      note: 'Sign-in flows and full-stack features for a luxury travel platform.',
+      note: 'A luxury travel platform built from scratch on the MERN stack, where I owned both the React client and the Node.js API.',
     },
     {
-      period: '2020 – 2021',
+      period: 'Nov 2020 – Jan 2022',
       role: 'Freelance developer',
       place: 'Independent clients',
-      note: 'Gamiyole, a carpooling app, and a trading bot connected to Binance and TradingView.',
+      note: 'Gamiyole, a carpooling app for travel between Georgian cities, and a trading bot connected to Binance and TradingView.',
     },
   ],
   askHint: 'An assistant I built with the Claude API. It answers from my CV and project notes.',
@@ -159,7 +170,7 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
     "Ask me about Levan's projects, experience or availability. " +
     'I answer from his CV and project notes.',
   chatSuggestions: [
-    'What did he work on at Bank of Georgia?',
+    'What did he build at Bank of Georgia?',
     'How does MEGZURI work?',
     'Is he available for new work?',
   ],

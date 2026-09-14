@@ -11,7 +11,7 @@ export interface CaseStudy {
 export const DEFAULT_CASE_STUDIES: CaseStudy[] = [
   {
     id: 'megzuri',
-    eyebrow: 'MEGZURI, 2026',
+    eyebrow: 'MEGZURI, 2025 – now',
     title: 'An average-speed assistant for Georgian drivers',
     teaser:
       'Designing and launching an app that shows drivers their live average speed between section cameras.',
@@ -33,7 +33,7 @@ The usual response is braking hard at the last camera, which makes traffic worse
 
 The app tracks the active trip, calculates average speed across the current section and shows the distance left. Around that core are user profiles, trip history, a public leaderboard and an admin panel for camera data.
 
-Camera locations and fine data change, so a scheduled Node.js job scrapes and updates them every day. The app runs on React Native with Firebase and Firestore.
+Camera locations and fine data change, so a scheduled Node.js job scrapes and updates them every day. The app is written in React Native and TypeScript, backed by Node.js, Firebase and Firestore.
 
 #### Design decisions
 
@@ -43,7 +43,7 @@ Trust mattered as much as clarity. People use MEGZURI to avoid fines, so a wrong
 
 #### Where it is now
 
-MEGZURI is live on the App Store, with an Android version planned. More than 25 people use it regularly, and I'm working on marketing to reach more drivers.
+MEGZURI launched on the App Store in July 2025 and is now on version 2. More than 1,000 people use it, it's rated 5.0 on the App Store, and an Android version is planned. I run the releases, the data pipeline and the marketing myself.
 
 #### What I learned
 
@@ -52,12 +52,12 @@ At a company you usually deliver the features you're given. Here I owned all of 
   {
     id: 'bogpay',
     eyebrow: 'Bank of Georgia, 2023 – 2026',
-    title: 'One form framework for 500 payment services',
+    title: 'One form engine for 500 payment services',
     teaser:
-      'Replacing hand-built payment forms on BOG Pay with a framework that renders every service from configuration.',
+      'Replacing hand-built payment forms on BOG Pay with an engine that renders every service from configuration, so new services launch without a frontend release.',
     bodyMd: `BOG Pay is Bank of Georgia's public payments site. Customers use it to pay for hundreds of services, such as utility bills and mobile top-ups, and each service needs its own form with its own fields, validation rules and edge cases.
 
-Most of these forms used to be built one at a time. In the online payments team, I helped replace that with a single framework that renders any service from a JSON definition.
+Most of these forms used to be built one at a time. In the online payments team, I designed and built a form engine that renders any service from a schema instead.
 
 #### The problem
 
@@ -73,20 +73,20 @@ In a payment flow those inconsistencies matter. A confusing form can mean a fail
 
 #### My role
 
-I helped lead the frontend side of the change. I looked for the patterns shared across hundreds of forms, broke their behaviour into reusable components and designed how forms would render from configuration. I worked with the backend and BFF, product, design, QA and architecture teams, and made sure unusual services still fit.
+I designed the engine and led the frontend work on it. I looked for the patterns shared across hundreds of forms, broke their behaviour into reusable components and designed how a form renders from configuration. I worked with the backend and BFF, product, design, QA and architecture teams, inside a regulated release process where correctness and auditability matter far more than on a typical consumer site.
 
 #### How it works
 
 We separated *what a form is* from *how it's rendered*. A JSON definition describes each service: its fields, labels, validation, conditional fields and metadata. The React frontend reads that definition and builds the form from shared components for inputs, selects, validation, errors, layout and the payment submit flow.
 
-Adding or changing a service became mostly a matter of writing the right configuration. When a service needed something unusual, the framework made room for it without a one-off screen.
+Adding a service became a configuration change. It no longer needed a frontend release or a frontend developer, and when a service needed something unusual, the engine made room for it without a one-off screen.
 
 #### Impact
 
-The team could support more than 500 differently structured services with far less repeated code. Forms behaved consistently, and new services took much less frontend work.
+The engine renders more than 500 differently structured services. New services ship through configuration alone, which took frontend releases out of the path to launching one. Forms behave consistently, and far less code is repeated between them.
 
 #### What I learned
 
-Complex products get easier to scale once you find the repeated patterns and build the right abstraction. The hard part is keeping that abstraction flexible. The framework had to cover the common cases and still handle the odd payment service, and finding that balance was the most interesting part of the work.`,
+Complex products get easier to scale once you find the repeated patterns and build the right abstraction. The hard part is keeping that abstraction flexible. The engine had to cover the common cases and still handle the odd payment service, and finding that balance was the most interesting part of the work.`,
   },
 ]

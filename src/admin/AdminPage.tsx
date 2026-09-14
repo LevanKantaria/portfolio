@@ -244,8 +244,14 @@ function Editor({ user }: { user: User }) {
           />
           <div className="admin-grid-2">
             <TextInput label="Email" value={site.email} onChange={setSiteField('email')} />
-            <TextInput label="LinkedIn URL" value={site.linkedin} onChange={setSiteField('linkedin')} />
+            <TextInput
+              label="Phone"
+              hint="leave blank to hide"
+              value={site.phone}
+              onChange={setSiteField('phone')}
+            />
           </div>
+          <TextInput label="LinkedIn URL" value={site.linkedin} onChange={setSiteField('linkedin')} />
           <TextInput
             label="CV link"
             hint="leave blank to hide"

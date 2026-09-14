@@ -31,7 +31,12 @@ function NavAsk() {
   )
 }
 
-/** "https://www.linkedin.com/in/levan-kantaria-bb223120b/" -> "in/levan-kantaria-bb223120b" */
+/** "+995 592 282 824" -> "tel:+995592282824" */
+function telHref(phone: string) {
+  return `tel:${phone.replace(/[^\d+]/g, '')}`
+}
+
+/** "https://www.linkedin.com/in/levan-kantaria/" -> "in/levan-kantaria" */
 function linkedinLabel(url: string) {
   const match = /linkedin\.com\/(in\/[^/?#]+)/i.exec(url)
   return match ? match[1] : 'Profile'
@@ -130,6 +135,14 @@ export default function App() {
                   <a href={`mailto:${site.email}`}>{site.email}</a>
                 </dd>
               </div>
+              {site.phone && (
+                <div>
+                  <dt>Phone</dt>
+                  <dd>
+                    <a href={telHref(site.phone)}>{site.phone}</a>
+                  </dd>
+                </div>
+              )}
               {site.linkedin && (
                 <div>
                   <dt>LinkedIn</dt>
@@ -242,6 +255,11 @@ export default function App() {
             <p className="contact-note">{site.availabilityNote}</p>
           )}
           <ul className="contact-links">
+            {site.phone && (
+              <li>
+                <a href={telHref(site.phone)}>{site.phone}</a>
+              </li>
+            )}
             {site.linkedin && (
               <li>
                 <a href={site.linkedin} target="_blank" rel="noreferrer">

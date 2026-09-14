@@ -10,29 +10,21 @@ export const MAX_HISTORY_MESSAGES = 12
 export const EXPERIENCE_MD = `
 # Levan Kantaria
 
-Full-stack engineer based in Tbilisi, Georgia. His strongest technical area is
-React / TypeScript frontend development, and he is comfortable working
-full-stack. 5+ years of experience, spent mostly on real production products —
-not demo projects: fintech payment platforms, his own shipped apps, and
-marketplace products.
+Full-stack engineer based in Tbilisi, Georgia, strongest on the frontend (React and TypeScript). More than five years of experience, almost all of it on production products rather than demos: public payment platforms at Bank of Georgia, a bank-wide design system, and two products of his own.
 
-Contact: l.kantaria1999@gmail.com
-LinkedIn: https://www.linkedin.com/in/levan-kantaria-bb223120b/
+Contact: l.kantaria1999@gmail.com, phone +995 592 282 824
+LinkedIn: https://www.linkedin.com/in/levan-kantaria/
 CV (PDF): https://drive.google.com/file/d/19-35F4dmYZR8mYcoXGwL00XB_0QUZqqJ/view
-(the CV is also linked on this site via the "Download CV" button in the hero)
+(the CV is also linked from this site's navigation and hero)
 
 About seeing his code: Levan's codebases are private and commercial — banking
 platforms and his own live products — so they are not open source. Code
 samples and code walkthroughs are available on request: email him at
 l.kantaria1999@gmail.com.
 
-Two detailed written case studies are published on this website in the Case
-studies section: "Turning BOG Pay service forms into a reusable framework"
-(about the 500+ service config-driven form system at Bank of Georgia) and
-"Building a real-time average-speed assistant for Georgian drivers" (about
-designing, building, and launching MEGZURI end to end as a solo founder).
+Two detailed case studies are published on this website in the Case studies section: "One form engine for 500 payment services" (the config-driven form engine at Bank of Georgia) and "An average-speed assistant for Georgian drivers" (designing, building and launching MEGZURI as a solo founder).
 
-## Availability — what he's looking for
+## Availability and what he's looking for
 
 - Currently available, open to both freelance and full-time roles, and can
   start immediately.
@@ -45,14 +37,17 @@ designing, building, and launching MEGZURI end to end as a solo founder).
 
 ## Education and languages
 
-- Degree in Computer Science from the Free University of Tbilisi.
+- BSc in Navigation, Batumi State Maritime Academy (2017 to 2021).
 - Languages: Georgian (native), fluent English, some Russian and French.
 
 ## Skills
 
-- Frontend: React, TypeScript, Next.js, React Native, Expo / Expo Router,
-  Redux, TanStack Query, Tailwind CSS, Radix UI, shadcn/ui, LitElement
-- Backend: Node.js, Express, GraphQL, PostgreSQL, MongoDB, Firebase
+- Frontend: TypeScript, JavaScript, React, Next.js, React Native, Expo / Expo Router,
+  Redux, Zustand, TanStack Query, Tailwind CSS, Radix UI, shadcn/ui, PWAs
+- Design systems: LitElement and Web Components, shared component libraries,
+  component API design, cross-framework interop (wrapping Lit web components as
+  typed React components)
+- Backend: Node.js, Express, GraphQL, REST, PostgreSQL, MongoDB, Firebase
   (Auth, Firestore, Storage, security rules), serverless and edge functions, docker, kubernetes
 - Cloud / AWS: hands-on with AWS Lambda (HTTP-triggered serverless functions),
   EC2 (ran his trading bot on an EC2 VM), S3 buckets, SES for transactional
@@ -64,85 +59,60 @@ designing, building, and launching MEGZURI end to end as a solo founder).
   Auth rather than Cognito — he finds it much easier to work with
 - Product & platform: admin dashboards, SEO-focused Next.js pages, product
   analytics, i18n / Georgian-English localization
-- Infrastructure & process: Kubernetes, Jenkins, Jira-based team workflows
+- Infrastructure & process: Docker, Kubernetes, CI/CD with Jenkins and GitHub Actions,
+  Jira-based team workflows
+- Practices: automated testing, code review
 - AI / LLM: Claude API integration, prompt engineering, structured prompt
   workflows, prompt-injection protection; daily AI-assisted development with
   Claude Code, Cursor, Claude, and OpenAI
 
 ## Work experience
 
-### Senior Web Developer / Analyst — Bank of Georgia (2023–2026)
+### Senior Web Developer / Analyst, Bank of Georgia (February 2023 to April 2026)
 
-Lead frontend developer in the online payments division of Bank of Georgia,
-one of Georgia's largest banks. Worked on secure Visa / MasterCard payment
-flows and helped build and maintain interfaces used by both business and
-retail customers.
+Frontend lead in the online payments division of Bank of Georgia, one of Georgia's largest banks, working on secure Visa and Mastercard payment flows in public-facing banking platforms used by retail and business customers: ibank.bog.ge (online banking) and bogpay.ge (public payments).
 
-- Guided frontend delivery and supported other developers through
-  implementation decisions and code reviews.
-- Worked closely with product managers, UX/UI designers, backend developers,
-  architects, and QA, in Jira-based team workflows.
-- Deep experience with complex dynamic forms and config-driven UI systems —
-  worked on a form system supporting 500+ differently structured services.
-- Contributed internal banking/payment features such as a currency calculator
-  modal, agreement/register workflows, and analytics integrations
-  (Google Analytics and Medallia-style feedback systems).
-- Used LitElement in production banking interfaces; worked with Jenkins and
-  Kubernetes in a production enterprise environment.
-- Live products: ibank.bog.ge (online banking), bogpay.ge (public payments platform).
-- On the ibank.bog.ge project, the team he worked in and guided consisted of
-  5 frontend developers, 2 backend developers, 1 QA, 2 designers, a product
-  owner, and a solution architect.
-- Tech: React, TypeScript, Redux, Tailwind, GraphQL, Node.js, PostgreSQL,
-  LitElement, Kubernetes, Jenkins.
-- Why the role ended in 2026: major organizational changes at the bank
-  affected his role. The job ended on good terms, and a recommendation letter
-  is available.
+- Design system: built and maintained shared components in the bank's LitElement-based design system, which is used across applications organisation-wide. Designed component APIs that had to stay stable for the teams consuming them.
+- React bridge: wrapped Lit web components as typed React components, so newer React applications could adopt the same bank-wide component library instead of forking or rebuilding it.
+- Form engine: designed and built a config-driven form engine that renders 500+ uniquely structured payment services from schema. New services are added through configuration alone, with no frontend release and no frontend developer involvement. This is the subject of a case study on this site.
+- Led frontend development for public banking platforms, working with product managers, UX/UI designers, backend developers, architects and QA, under a regulated release process with correctness and auditability requirements well above a typical consumer website.
+- Guided frontend delivery and supported other developers through implementation decisions and code reviews.
+- On the ibank.bog.ge project, the team he worked in and guided was 5 frontend developers, 2 backend developers, 1 QA, 2 designers, a product owner and a solution architect.
+- Also built banking features such as a currency calculator modal, agreement and register workflows, and analytics integrations (Google Analytics and Medallia-style feedback).
+- Tech: LitElement, Web Components, React, TypeScript, Redux, Tailwind, GraphQL, Node.js, PostgreSQL, Jenkins, Kubernetes.
+- Why the role ended in 2026: major organizational changes at the bank affected his role. The job ended on good terms, and a recommendation letter is available.
 
-### Founder & Full-stack Developer — MEGZURI (2026–present)
+### Founder and full-stack developer, MEGZURI (June 2025 to present)
 
-Levan is the founder and developer of MEGZURI, a mobile app solving a real
-Georgian driving problem: tracking average speed between section-camera zones
-so drivers stay within limits and drive more smoothly.
+Levan founded and built MEGZURI, a mobile app for a real Georgian driving problem: tracking average speed between section-camera zones so drivers stay within the limit and avoid fines.
 
-- Live average-speed calculation, remaining-distance logic, trip history,
-  user profiles, public leaderboard, and admin tools.
-- Automated camera and traffic-fine data updates through web scraping and
-  scheduled jobs.
-- Beyond the code, Levan works on marketing, product design, landing pages,
-  and growth experiments for MEGZURI.
-- The UI is a dark, premium, Tesla/Tessie-inspired design system, built as a
-  Georgian-language, localization-friendly product.
-- Live at megzuri.info; available on iOS, with Android planned.
-- Recently launched and slowly gaining traction: used regularly by 25+ users,
-  with active work on advertisement and spreading the word.
-- Tech: React Native, Expo, Firebase, Firestore, Node.js.
+- Designed and built the React Native client in TypeScript, and the Node.js and Firebase service behind it.
+- Real-time trip guidance with live average-speed and remaining-distance calculation, plus trip history, user profiles, a public leaderboard and internal admin tools.
+- Camera and traffic-fine data update automatically every day through web scraping and scheduled jobs.
+- Traction: more than 1,000 users and a 5.0 rating on the App Store. First released on the App Store in July 2025 and now on version 2. An Android version is planned.
+- Owns the full release cycle, and also works on marketing, product design, landing pages and growth experiments.
+- Dark, premium interface inspired by Tesla and Tessie, built as a Georgian-language, localization-friendly product.
+- Live at megzuri.info and on the iOS App Store.
+- Tech: React Native, Expo, TypeScript, Node.js, Firebase, Firestore.
 
-### Full-stack Developer — MakersHub (2025–2026)
+### Founder and full-stack developer, MakersHub (September 2025 to present)
 
-Georgian marketplace for handmade and local maker products — 3D prints, epoxy,
-woodworking, leather, jewelry, candles, ceramics, soaps, and similar
-categories.
+Levan founded and built MakersHub, a Georgian marketplace for handmade and local maker products: 3D prints, epoxy, woodworking, leather, jewelry, candles, ceramics, soaps and similar categories.
 
-- Seller onboarding, product listing management, admin dashboards, and
-  marketplace moderation.
-- Hybrid architecture: Next.js for SEO-focused public pages, React SPA for
-  admin/dashboard interfaces.
-- Firebase Storage for media, Firestore/MongoDB for data, SendGrid-style
-  transactional email.
-- Practical experience building not only the code but also the business and
-  product side of a marketplace.
+- Hybrid frontend architecture: Next.js server rendering for SEO-critical public storefronts, and a React single-page app for the seller and admin interfaces, with shared component patterns across both.
+- Multi-role authenticated flows: seller onboarding, product listing management, admin dashboards and marketplace moderation.
+- Node.js and Express API, MongoDB and Firestore data layer, Firebase Storage for media, and transactional email.
+- Handles the business and product side of running a marketplace as well as the code.
 - Live and operating at makershub.ge.
+- Tech: Next.js, React, TypeScript, Node.js, Express, MongoDB, Firestore, Firebase Storage, SendGrid.
 
-### Full-stack Developer — ITechArt (2021–2022, one year)
+### Frontend Developer, ITechArt (February 2022 to January 2023)
 
-Worked on a luxury travel/trips platform: authenticated user flows and
-full-stack product features.
+- Built the customer-facing web platform for a luxury travel agency client from scratch on the MERN stack, owning both the React client and the Node.js and Express API.
+- Modelled the MongoDB data layer and implemented the REST API alongside the frontend, including authenticated user flows, working in an outsourced delivery team directly with the client.
+- Tech: React, TypeScript, Redux-Saga, Tailwind, GraphQL, Apollo, Node.js, Express, MongoDB, PostgreSQL, JWT, OAuth2.
 
-- Tech: React, TypeScript, Redux-Saga, Tailwind, GraphQL, Apollo, Node.js,
-  Express, PostgreSQL, JWT, OAuth2.
-
-### React Developer — Manufacture (2022)
+### React Developer, Manufacture (2022)
 
 Worked on Manufactured, a manufacturing workflow/middleware platform
 connecting clients. Tech: React, Redux, Node.js. The product's website
@@ -167,14 +137,10 @@ designed and built by Levan himself.
   theoretical AI skill. He can build the same kind of assistant, or other
   Claude/OpenAI API integrations, into other products.
 
-### Freelance (2020–2021)
+### Freelance software developer (November 2020 to January 2022)
 
-- Gamiyole — carpooling app for affordable intercity travel in Georgia:
-  driver route publishing, passenger search/join flows, user profiles, and
-  driver ratings. Tech: React, Redux, Firebase.
-- Trading bot — trading automation built with Node.js using Discord, Binance,
-  Telegram, and TradingView APIs. Ran on an AWS EC2 VM and used AWS SES for
-  email notifications.
+- Gamiyole: a carpooling app for affordable travel between Georgian cities, with route publishing and search, passenger booking, user profiles and driver ratings. Built with React, Redux and Firebase. Live at gamiyole.me.
+- Trading bot: Node.js automation connecting Discord, Binance, Telegram and TradingView APIs. Ran on an AWS EC2 VM and used AWS SES for email notifications.
 
 ## Working style and strengths
 
