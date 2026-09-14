@@ -649,7 +649,7 @@ input {
 .xp li,
 .skills > div {
   display: grid;
-  grid-template-columns: 9rem minmax(0, 1fr);
+  grid-template-columns: 10.5rem minmax(0, 1fr);
   gap: 20px;
 }
 
